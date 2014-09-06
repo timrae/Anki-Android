@@ -45,8 +45,10 @@ import com.ichi2.anim.ActivityTransitionAnimation;
 import com.ichi2.async.DeckTask;
 import com.ichi2.libanki.Collection;
 import com.ichi2.libanki.Utils;
-import com.ichi2.libanki.hooks.ChessFilter;
+import com.ichi2.libanki.hooks.ExternalHookLoader;
 import com.ichi2.libanki.hooks.HebrewFixFilter;
+import com.ichi2.libanki.hooks.Hook;
+import com.ichi2.libanki.hooks.HookPlugin;
 import com.ichi2.preferences.NumberRangePreference;
 import com.ichi2.themes.StyledDialog;
 import com.ichi2.themes.StyledProgressDialog;
@@ -420,6 +422,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
                     AnkiDroidApp.createNoMediaFileIfMissing(decksDirectory);
                 }
             } else if (key.equals("convertFenText")) {
+                ExternalHookLoader hl = new ExternalHookLoader(this, AnkiDroidApp.getCurrentAnkiDroidDirectory());
+                HookPlugin ChessFilter = hl.importExternalHook("ChessFilter.jar", "com.ichi2.anki.plugins.hooks.ChessFilter");
                 if (convertFenText.isChecked()) {
                     ChessFilter.install(AnkiDroidApp.getHooks());
                 } else {

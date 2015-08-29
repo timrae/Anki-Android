@@ -477,6 +477,7 @@ public class DeckTask extends BaseAsyncTask<DeckTask.TaskData, DeckTask.TaskData
             String prompt = DeckPicker.AUTOMATIC_SYNC_PROMPT;
             if (prefs.getString("hkey", "").length() > 0 && prefs.getString("automaticSync", "1").equals(prompt) &&
                     Connection.isOnline()) {
+                slc = slc || prefs.getBoolean("remoteChangesToPull",false);
                 slc = slc || col.schemaChanged();
                 slc=slc||col.getDb().getDatabase().rawQuery("SELECT usn FROM revlog WHERE usn==-1", null).getCount() >0;
                 slc=slc||col.getDb().getDatabase().rawQuery("SELECT usn FROM notes WHERE usn==-1", null).getCount() > 0;

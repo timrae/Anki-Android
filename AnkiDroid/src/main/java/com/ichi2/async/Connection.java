@@ -67,6 +67,8 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
     public static final int TASK_TYPE_DOWNLOAD_MEDIA = 5;
     public static final int TASK_TYPE_REGISTER = 6;
     public static final int TASK_TYPE_UPGRADE_DECKS = 7;
+    public static final int TASK_TYPE_CHECK_REMOTE_CHANGES = 8;
+
     public static final int CONN_TIMEOUT = 30000;
 
 
@@ -185,6 +187,11 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
         return launchConnectionTask(listener, data);
     }
 
+    public static Connection checkForRemoteChanges(TaskListener listener, Payload data) {
+        data.taskType = TASK_TYPE_CHECK_REMOTE_CHANGES;
+        return launchConnectionTask(listener, data);
+    }
+
 
     @Override
     protected Payload doInBackground(Payload... params) {
@@ -212,6 +219,9 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
 
             case TASK_TYPE_UPGRADE_DECKS:
                 throw new RuntimeException("Upgrade decks no longer supported");
+
+            case TASK_TYPE_CHECK_REMOTE_CHANGES:
+                return doInBackgroundCheckRemoteChanges(data);
 
             default:
                 return null;
@@ -323,6 +333,41 @@ public class Connection extends BaseAsyncTask<Connection.Payload, Object, Connec
                 msg.contains("SocketTimeoutException") ||
                 msg.contains("ClientProtocolException") ||
                 msg.contains("TimeoutException");
+    }
+
+
+    private Payload doInBackgroundCheckRemoteChanges(Payload data) {
+        try {
+            // Get reference to Collection
+            Collection col = CollectionHelper.getInstance().getCol(AnkiDroidApp.getInstance());
+            // Get the meta data from the server
+            Timber.i("doInBackgroundCheckRemoteChanges: Fetching meta data from server");
+            HttpSyncer server = new RemoteServer(this, (String) data.data[0]);
+            HttpResponse ret = server.meta();
+            server.finish();
+            if (ret == null) {
+                return new Payload(new Object[]{false});
+            }
+            JSONObject rMeta = new JSONObject(server.stream2String(ret.getEntity().getContent()));
+            Timber.i("doInBackgroundCheckRemoteChanges: Checking if there is info to sync");
+            // Check if there are changes that need syncing
+            if (col.getScm() != rMeta.getLong("scm")) {
+                // Return true if full sync required
+                Timber.i("doInBackgroundCheckRemoteChanges: Full sync required");
+                return new Payload(new Object[]{true});
+            } else if (rMeta.getLong("mod") > col.getMod()) {
+                // Return true if mod time of server is newer than local mod time
+                Timber.i("doInBackgroundCheckRemoteChanges: Remote collection newer than local collection");
+                return new Payload(new Object[]{true});
+            } else {
+                // Otherwise return false
+                Timber.i("doInBackgroundCheckRemoteChanges: No changes to sync");
+                return new Payload(new Object[]{false});
+            }
+        } catch (Exception e) {
+            Timber.e(e, "Could not connect to server when checking for remote changes");
+            return new Payload(new Object[]{false});
+        }
     }
 
 

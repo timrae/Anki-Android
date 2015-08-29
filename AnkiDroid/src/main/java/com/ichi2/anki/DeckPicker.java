@@ -131,8 +131,8 @@ public class DeckPicker extends NavigationDrawerActivity implements
     private static final int ADD_SHARED_DECKS = 15;
 
     // For automatic syncing
-    // 10 minutes in milliseconds.
-    public static final long AUTOMATIC_SYNC_MIN_INTERVAL = 600000;
+    public static final long AUTOMATIC_SYNC_MIN_INTERVAL = 600000;      // 10 minutes in milliseconds.
+    public static final long SEMIAUTOMATIC_SYNC_MIN_INTERVAL = 60000;   // 1 minute in milliseconds.
     public static final String AUTOMATIC_SYNC_PROMPT = "1";
     public static final String AUTOMATIC_SYNC_ENABLED = "2";
 
@@ -1005,6 +1005,21 @@ public class DeckPicker extends NavigationDrawerActivity implements
     }
 
 
+    /**
+     * Show a snackbar indicating that there are changes that need to be synced
+     */
+    private void showSyncPrompt() {
+        OnClickListener listener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sync();
+            }
+        };
+        View rootLayout = findViewById(R.id.root_layout);
+        showSnackbar(R.string.sync_prompt, false, R.string.button_sync, listener, rootLayout);
+    }
+
+
     @Override
     public void showImportDialog(int id) {
         showImportDialog(id, "");
@@ -1192,6 +1207,35 @@ public class DeckPicker extends NavigationDrawerActivity implements
     }
 
 
+    private void checkForRemoteChanges() {
+        final SharedPreferences prefs = AnkiDroidApp.getSharedPrefs(this);
+        Connection.TaskListener remoteChangesListener = new Connection.TaskListener() {
+            @Override
+            public void onPreExecute() {}
+            @Override
+            public void onDisconnected() {}
+            @Override
+            public void onProgressUpdate(Object... values) {}
+
+            @Override
+            public void onPostExecute(Payload data) {
+                if ((boolean) data.data[0]) {
+                    prefs.edit().putBoolean("remoteChangesToPull", true).commit();
+                    prefs.edit().putLong("lastSyncTime", System.currentTimeMillis());
+                    showSyncPrompt();
+                }
+            }
+        };
+        String hkey = prefs.getString("hkey","");
+        String autoSyncPref = prefs.getString("automaticSync", "1");
+        long lastSyncTime = prefs.getLong("lastSyncTime", 0);
+        if (!hkey.equals("") && Connection.isOnline() && autoSyncPref.equals(AUTOMATIC_SYNC_PROMPT) &&
+                Utils.intNow(1000) - lastSyncTime > SEMIAUTOMATIC_SYNC_MIN_INTERVAL) {
+            Connection.checkForRemoteChanges(remoteChangesListener, new Connection.Payload(new Object[] { hkey}));
+        }
+    }
+
+
     // Sync with Anki Web
     @Override
     public void sync() {
@@ -1286,6 +1330,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
             String syncMessage = "";
             Timber.d("Sync Listener onPostExecute()");
             Resources res = getResources();
+            SharedPreferences preferences = AnkiDroidApp.getSharedPrefs(getBaseContext());
             try {
                 if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
@@ -1301,7 +1346,6 @@ public class DeckPicker extends NavigationDrawerActivity implements
                     String resultType = (String) result[0];
                     if (resultType.equals("badAuth")) {
                         // delete old auth information
-                        SharedPreferences preferences = AnkiDroidApp.getSharedPrefs(getBaseContext());
                         Editor editor = preferences.edit();
                         editor.putString("username", "");
                         editor.putString("hkey", "");
@@ -1414,16 +1458,14 @@ public class DeckPicker extends NavigationDrawerActivity implements
                 } else {
                     showSyncLogMessage(R.string.sync_database_acknowledge);
                 }
+                preferences.edit().putBoolean("remoteChangesToPull", false).commit();
                 updateDeckList();
             }
 
             // Write the time last sync was carried out. Useful for automatic sync interval.
             // Turns out getLs() query will get the same old value if the last sync didn't find any changes, thus is
             // unsuitable.
-            SharedPreferences preferences = AnkiDroidApp.getSharedPrefs(getBaseContext());
-            Editor editor = preferences.edit();
-            editor.putLong("lastSyncTime", System.currentTimeMillis());
-            editor.commit();
+            preferences.edit().putLong("lastSyncTime", System.currentTimeMillis()).commit();
         }
     };
 
@@ -1672,14 +1714,9 @@ public class DeckPicker extends NavigationDrawerActivity implements
                 AnkiStatsTaskHandler.createSmallTodayOverview(getCol(), mTodayTextView);
                 // Prompt to sync if this setting is enabled and there are local changes to upload
                 if ((boolean) result.getObjArray()[1]) {
-                    OnClickListener listener = new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            sync();
-                        }
-                    };
-                    View rootLayout = findViewById(R.id.root_layout);
-                    showSnackbar(R.string.sync_prompt, false, R.string.button_sync, listener, rootLayout);
+                    showSyncPrompt();
+                } else {
+                    checkForRemoteChanges();
                 }
             }
 

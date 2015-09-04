@@ -133,8 +133,6 @@ public class DeckPicker extends NavigationDrawerActivity implements
     // For automatic syncing
     // 10 minutes in milliseconds.
     public static final long AUTOMATIC_SYNC_MIN_INTERVAL = 600000;
-    public static final String AUTOMATIC_SYNC_PROMPT = "1";
-    public static final String AUTOMATIC_SYNC_ENABLED = "2";
 
     private MaterialDialog mProgressDialog;
 
@@ -696,7 +694,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         // (currently 10 minutes)
         String hkey = preferences.getString("hkey", "");
         long lastSyncTime = preferences.getLong("lastSyncTime", 0);
-        if (hkey.length() != 0 && preferences.getString("automaticSync", "1").equals(AUTOMATIC_SYNC_ENABLED) &&
+        if (hkey.length() != 0 && preferences.getBoolean("automaticSyncMode", false) &&
                 Connection.isOnline() && Utils.intNow(1000) - lastSyncTime > AUTOMATIC_SYNC_MIN_INTERVAL) {
             sync();
         }
@@ -1670,17 +1668,6 @@ public class DeckPicker extends NavigationDrawerActivity implements
                 supportInvalidateOptionsMenu();
                 // Update the mini statistics bar as well
                 AnkiStatsTaskHandler.createSmallTodayOverview(getCol(), mTodayTextView);
-                // Prompt to sync if this setting is enabled and there are local changes to upload
-                if ((boolean) result.getObjArray()[1]) {
-                    OnClickListener listener = new OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            sync();
-                        }
-                    };
-                    View rootLayout = findViewById(R.id.root_layout);
-                    showSnackbar(R.string.sync_prompt, false, R.string.button_sync, listener, rootLayout);
-                }
             }
 
             @Override

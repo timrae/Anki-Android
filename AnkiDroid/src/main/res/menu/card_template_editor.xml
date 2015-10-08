@@ -7,6 +7,12 @@
         ankidroid:showAsAction="ifRoom"
         android:visible="false"/>
     <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/card_editor_preview_card"
+        ankidroid:showAsAction="ifRoom"
+        android:visible="false"/>
+    <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_menu_add"
         android:title="@string/card_template_editor_menu_add_reverse"

@@ -66,7 +66,7 @@ public class CardTemplateEditor extends AnkiActivity {
     private SlidingTabLayout mSlidingTabLayout;
     private MaterialDialog mProgressDialog;
     private long mModelId;
-    //private long mCardId;
+    private long mCardId = -1L;
     private boolean mChanged = false;
 
 
@@ -137,8 +137,7 @@ public class CardTemplateEditor extends AnkiActivity {
             finishWithoutAnimation();
             return;
         }
-        // TODO: Use card ID for preview feature
-        //mCardId = getIntent().getLongExtra("cardId", -1L);
+        mCardId = getIntent().getLongExtra("cardId", -1L);
 
         // Disable the home icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -308,12 +307,11 @@ public class CardTemplateEditor extends AnkiActivity {
                 front.setText(template.getString("qfmt"));
                 css.setText(model.getString("css"));
                 back.setText(template.getString("afmt"));
-                // TODO: Enable editing if not built-in model
-                /*if (!isStandardModel()) {
+                if (!isStandardModel()) {
                     front.setEnabled(true);
                     css.setEnabled(true);
                     back.setEnabled(true);
-                }*/
+                }
                 // Enable menu
                 setHasOptionsMenu(true);
             } catch (JSONException e) {
@@ -340,7 +338,7 @@ public class CardTemplateEditor extends AnkiActivity {
 
         @Override
         public void onPrepareOptionsMenu(Menu menu) {
-            /*try {
+            try {
                 // only show option to add reverse card if one existing card and not standard model
                 if (getModel().getJSONArray("tmpls").length() == 1 && !isStandardModel()) {
                     menu.findItem(R.id.action_add).setVisible(true);
@@ -349,9 +347,7 @@ public class CardTemplateEditor extends AnkiActivity {
                 }
             } catch (JSONException e) {
                 throw new RuntimeException(e);
-            }*/
-            // TODO: Expose after making a more user-friendly interface for adding / editing card templates
-            menu.findItem(R.id.action_add).setVisible(false);
+            }
         }
 
         @Override
@@ -386,8 +382,11 @@ public class CardTemplateEditor extends AnkiActivity {
                         throw new RuntimeException(e);
                     }
                     return true;
-                //TODO:  Make way to temporarily save cards so that we can expose preview function
-                /*case R.id.action_preview: */
+                case R.id.action_save:
+
+                    return true;
+                case R.id.action_preview:
+                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }

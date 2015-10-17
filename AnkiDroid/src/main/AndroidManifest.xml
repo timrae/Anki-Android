@@ -60,7 +60,7 @@
                 android:description="@string/read_write_permission_description"
                 android:protectionLevel="dangerous" />
     <!-- custom tabs library has minimum SDK of 16 -->
-    <uses-sdk tools:overrideLibrary="android.support.customtabs"/>
+    <uses-sdk tools:overrideLibrary="android.support.customtabs, android.support.v14.preference"/>
 
     <supports-screens
         android:anyDensity="true"
@@ -199,8 +199,7 @@
         <activity
             android:name="com.ichi2.anki.Preferences"
             android:configChanges="keyboardHidden|orientation|locale|screenSize"
-            android:label="@string/preferences_title"
-            android:theme="@style/LegacyActionBarWhite"/>
+            android:label="@string/preferences_title"/>
         <activity
             android:name="com.ichi2.anki.DeckOptions"
             android:configChanges="keyboardHidden|orientation|locale|screenSize"

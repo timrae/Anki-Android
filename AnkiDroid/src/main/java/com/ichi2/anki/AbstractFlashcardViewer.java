@@ -64,7 +64,6 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -83,7 +82,6 @@ import com.ichi2.libanki.Sched;
 import com.ichi2.libanki.Sound;
 import com.ichi2.libanki.Utils;
 import com.ichi2.themes.HtmlColors;
-import com.ichi2.themes.StyledProgressDialog;
 import com.ichi2.themes.Themes;
 import com.ichi2.utils.DiffEngine;
 import com.ichi2.utils.HtmlUtil;
@@ -874,9 +872,7 @@ public abstract class AbstractFlashcardViewer extends NavigationDrawerActivity {
         // create inherited navigation drawer layout here so that it can be used by parent class
         setContentView(R.layout.flashcard);
         View mainView = findViewById(android.R.id.content);
-        initNavigationDrawer(mainView, mPrefFullscreenReview);
-        // Ensure software keyboard resizes the screen when used in typing fields
-        allowResizeForSoftKeyboard();
+        initNavigationDrawer(mainView);
         // Load the collection
         startLoadingCollection();
     }

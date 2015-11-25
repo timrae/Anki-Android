@@ -486,6 +486,9 @@ public class DeckPicker extends NavigationDrawerActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Resources res = getResources();
+        if (getDrawerToggle().onOptionsItemSelected(item)) {
+            return true;
+        }
         switch (item.getItemId()) {
 
             case R.id.action_undo:
@@ -626,7 +629,7 @@ public class DeckPicker extends NavigationDrawerActivity implements
         Timber.d("onResume()");
         super.onResume();
         mActivityPaused = false;
-        selectNavigationItem(DRAWER_DECK_PICKER);
+        selectNavigationItem(R.id.nav_decks);
         if (mSyncOnResume) {
             sync();
             mSyncOnResume = false;

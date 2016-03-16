@@ -48,6 +48,7 @@ import android.view.WindowManager.BadTokenException;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.ichi2.anki.provider.legacy.CardContentProvider;
 import com.ichi2.libanki.hooks.AdvancedStatistics;
 import com.ichi2.themes.Themes;
 import com.ichi2.ui.AppCompatPreferenceActivity;
@@ -512,17 +513,7 @@ public class Preferences extends AppCompatPreferenceActivity implements Preferen
                     break;
                 }
                 case "providerEnabled": {
-                    ComponentName providerName = new ComponentName(this, "com.ichi2.anki.provider.CardContentProvider");
-                    PackageManager pm = getPackageManager();
-                    int state;
-                    if (((CheckBoxPreference) pref).isChecked()) {
-                         state = PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
-                        Timber.i("AnkiDroid ContentProvider enabled by user");
-                    } else {
-                        state = PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-                        Timber.i("AnkiDroid ContentProvider disabled by user");
-                    }
-                    pm.setComponentEnabledSetting(providerName, state, PackageManager.DONT_KILL_APP);
+                    CardContentProvider.setEnabledState(this, ((CheckBoxPreference) pref).isChecked());
                     break;
                 }
             }

@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -30,6 +31,7 @@ import android.view.ViewConfiguration;
 
 import com.ichi2.anki.dialogs.AnkiDroidCrashReportDialog;
 import com.ichi2.anki.exception.StorageAccessException;
+import com.ichi2.anki.provider.legacy.CardContentProvider;
 import com.ichi2.compat.CompatHelper;
 import com.ichi2.utils.LanguageUtil;
 
@@ -194,6 +196,10 @@ public class AnkiDroidApp extends Application {
                     sendExceptionReport(e, "AnkiDroidApp.onCreate");
                 }
             }
+        }
+        // Disable the legacy ContentProvider on Android M and above
+        if (CompatHelper.getSdkVersion() >= Build.VERSION_CODES.M) {
+            CardContentProvider.setEnabledState(this, false);
         }
     }
 

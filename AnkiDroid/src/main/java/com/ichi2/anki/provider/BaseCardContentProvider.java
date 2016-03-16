@@ -22,7 +22,6 @@ package com.ichi2.anki.provider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
@@ -73,44 +72,30 @@ import java.util.Set;
  * <p/>
  * Note that unlike Android's contact providers:
  * <ul>
-  * <li>it's not possible to access cards of more than one note at a time</li>
+ * <li>it's not possible to access cards of more than one note at a time</li>
  * <li>it's not possible to access cards of a note without providing the note's ID</li>
  * </ul>
  */
-public class CardContentProvider extends ContentProvider {
+public abstract class BaseCardContentProvider extends ContentProvider {
 
     /* URI types */
-    private static final int NOTES = 1000;
-    private static final int NOTES_ID = 1001;
-    private static final int NOTES_ID_CARDS = 1003;
-    private static final int NOTES_ID_CARDS_ORD = 1004;
-    private static final int MODELS = 2000;
-    private static final int MODELS_ID = 2001;
-    private static final int MODELS_ID_TEMPLATES = 2003;
-    private static final int MODELS_ID_TEMPLATES_ID = 2004;
-    private static final int SCHEDULE = 3000;
-    private static final int DECKS = 4000;
-    private static final int DECK_SELECTED = 4001;
-    private static final int DECKS_ID = 4002;
+    protected static final int NOTES = 1000;
+    protected static final int NOTES_ID = 1001;
+    protected static final int NOTES_ID_CARDS = 1003;
+    protected static final int NOTES_ID_CARDS_ORD = 1004;
+    protected static final int MODELS = 2000;
+    protected static final int MODELS_ID = 2001;
+    protected static final int MODELS_ID_TEMPLATES = 2003;
+    protected static final int MODELS_ID_TEMPLATES_ID = 2004;
+    protected static final int SCHEDULE = 3000;
+    protected static final int DECKS = 4000;
+    protected static final int DECK_SELECTED = 4001;
+    protected static final int DECKS_ID = 4002;
 
-    private static final UriMatcher sUriMatcher =
-            new UriMatcher(UriMatcher.NO_MATCH);
 
-    static {
-        // Here you can see all the URIs at a glance
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "notes", NOTES);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "notes/#", NOTES_ID);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "notes/#/cards", NOTES_ID_CARDS);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "notes/#/cards/#", NOTES_ID_CARDS_ORD);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "models", MODELS);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "models/*", MODELS_ID);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "models/*/templates", MODELS_ID_TEMPLATES);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "models/*/templates/#", MODELS_ID_TEMPLATES_ID);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "schedule/", SCHEDULE);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "decks/", DECKS);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "decks/#", DECKS_ID);
-        sUriMatcher.addURI(FlashCardsContract.AUTHORITY, "selected_deck/", DECK_SELECTED);
-    }
+    /** The URIs must be added by the subclass **/
+    protected static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
 
     /**
      * The names of the columns returned by this content provider differ slightly from the names
@@ -135,7 +120,6 @@ public class CardContentProvider extends ContentProvider {
     public boolean onCreate() {
         // Initialize content provider on startup.
         Timber.d("CardContentProvider: onCreate");
-
         return true;
     }
 
@@ -411,16 +395,11 @@ public class CardContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         logProviderCall("update", uri);
         Collection col = CollectionHelper.getInstance().getCol(getContext());
         if (col == null) {
             return 0;
-        }
-
-        if (getContext().checkCallingPermission(FlashCardsContract.READ_WRITE_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-            throw new IllegalStateException("Update permission not granted for: " + uri);
         }
 
         // Find out what data the user is requesting
@@ -610,7 +589,7 @@ public class CardContentProvider extends ContentProvider {
                         updated++;
                     }else{
                         Timber.e("Requested card with noteId %d and cardOrd %d was not found. Either the provided " +
-                            "noteId/cardOrd were wrong or the card has been deleted in the meantime.", noteID, cardOrd);
+                                "noteId/cardOrd were wrong or the card has been deleted in the meantime.", noteID, cardOrd);
                     }
                 }
                 break;
@@ -646,10 +625,6 @@ public class CardContentProvider extends ContentProvider {
         if (col == null) {
             return 0;
         }
-        if (getContext().checkCallingPermission(FlashCardsContract.READ_WRITE_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-            throw new IllegalStateException("Delete permission not granted for: " + uri);
-        }
-
         switch (sUriMatcher.match(uri)) {
             case NOTES_ID:
                 col.remNotes(new long[]{Long.parseLong(uri.getPathSegments().get(1))});
@@ -1149,9 +1124,9 @@ public class CardContentProvider extends ContentProvider {
         String path = uri == null ? null : uri.getPath();
         String msg;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            msg = String.format(format, CardContentProvider.class.getSimpleName(), methodName, path);
+            msg = String.format(format, this.getClass().getSimpleName(), methodName, path);
         } else {
-            msg = String.format(format + " (%s)", CardContentProvider.class.getSimpleName(), methodName, path, getCallingPackage());
+            msg = String.format(format + " (%s)", this.getClass().getSimpleName(), methodName, path, getCallingPackage());
         }
         Timber.i(msg);
         Collection col = CollectionHelper.getInstance().getCol(getContext());

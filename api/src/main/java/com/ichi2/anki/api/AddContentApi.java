@@ -26,6 +26,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 
 import com.ichi2.anki.FlashCardsContract;
 
@@ -41,6 +42,7 @@ import java.util.Set;
 public final class AddContentApi {
     private final ContentResolver mResolver;
     private final Context mContext;
+    private final int mProviderVersion;
     private static final String TEST_TAG = "PREVIEW_NOTE";
     private static final String DECK_REF_DB = "com.ichi2.anki.api.decks";
     private static final String MODEL_REF_DB = "com.ichi2.anki.api.models";
@@ -56,6 +58,20 @@ public final class AddContentApi {
     public AddContentApi(Context context) {
         mContext = context.getApplicationContext();
         mResolver = mContext.getContentResolver();
+        mProviderVersion =getProviderVersion(context);
+    }
+
+    private static int getProviderVersion(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return 2;  // Android M or higher device
+        }
+        if (context.checkSelfPermission(FlashCardsContract.READ_WRITE_PERMISSION) == PackageManager.PERMISSION_GRANTED){
+            return 2;  // We already have the necessary permission to use the new provider
+        }
+        if (context.getPackageManager().resolveContentProvider(FlashCardsContract.getAuthority(1), 0) == null) {
+            return 2;  // The legacy provider doesn't exist (maybe AnkiDroid disabled it)
+        }
+        return 1;
     }
 
 
@@ -92,11 +108,11 @@ public final class AddContentApi {
         if (result == null) {
             return null;
         }
-        return Uri.withAppendedPath(FlashCardsContract.Note.CONTENT_URI, Long.toString(result.getId()));
+        return Uri.withAppendedPath(FlashCardsContract.Note.getUri(mProviderVersion), Long.toString(result.getId()));
     }
 
     private Uri addNote(long did, ContentValues values) {
-        Uri newNoteUri = mResolver.insert(FlashCardsContract.Note.CONTENT_URI, values);
+        Uri newNoteUri = mResolver.insert(FlashCardsContract.Note.getUri(mProviderVersion), values);
         if (newNoteUri == null) {
             return null;
         }
@@ -215,7 +231,8 @@ public final class AddContentApi {
      */
     public int getNoteCount(long mid) {
         String[] selectionArgs = {String.format("%s=%d", FlashCardsContract.Note.MID, mid)};
-        Cursor cursor = mResolver.query(FlashCardsContract.Note.CONTENT_URI, PROJECTION, null, selectionArgs, null);
+        Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
+        Cursor cursor = mResolver.query(authority, PROJECTION, null, selectionArgs, null);
         if (cursor == null) {
             return 0;
         }
@@ -274,7 +291,7 @@ public final class AddContentApi {
 
     private NoteInfo getNote(long noteId) {
         String[] selectionArgs = {String.format("%s=%d", FlashCardsContract.Note._ID, noteId)};
-        Cursor cursor = mResolver.query(FlashCardsContract.Note.CONTENT_URI, PROJECTION, null, selectionArgs, null);
+        Cursor cursor = mResolver.query(FlashCardsContract.Note.getUri(mProviderVersion), PROJECTION, null, selectionArgs, null);
         if (cursor == null) {
             return null;
         }
@@ -287,7 +304,7 @@ public final class AddContentApi {
 
 
     private boolean updateNote(long noteId, String[] fields, Set<String> tags) {
-        Uri.Builder builder = FlashCardsContract.Note.CONTENT_URI.buildUpon();
+        Uri.Builder builder = FlashCardsContract.Note.getUri(mProviderVersion).buildUpon();
         Uri contentUri = builder.appendPath(Long.toString(noteId)).build();
         ContentValues values = new ContentValues();
         if (fields != null) {
@@ -380,7 +397,7 @@ public final class AddContentApi {
         values.put(FlashCardsContract.Model.NUM_CARDS, cards.length);
         values.put(FlashCardsContract.Model.CSS, css);
         values.put(FlashCardsContract.Model.DECK_ID, did);
-        Uri modelUri = mResolver.insert(FlashCardsContract.Model.CONTENT_URI, values);
+        Uri modelUri = mResolver.insert(FlashCardsContract.Model.getUri(mProviderVersion), values);
         // Set the remaining template parameters
         Uri templatesUri = Uri.withAppendedPath(modelUri, "templates");
         for (int i = 0; i < cards.length; i++) {
@@ -408,7 +425,8 @@ public final class AddContentApi {
      */
     public long getCurrentModelId() {
         // Get the current model
-        Uri uri = Uri.withAppendedPath(FlashCardsContract.Model.CONTENT_URI, FlashCardsContract.Model.CURRENT_MODEL_ID);
+        Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
+        Uri uri = Uri.withAppendedPath(authority, FlashCardsContract.Model.CURRENT_MODEL_ID);
         final Cursor singleModelCursor = mResolver.query(uri, null, null, null, null);
         long modelId;
         try {
@@ -457,7 +475,7 @@ public final class AddContentApi {
      */
     public String[] getFieldList(long modelId) {
         // Get the current model
-        Uri uri = Uri.withAppendedPath(FlashCardsContract.Model.CONTENT_URI, Long.toString(modelId));
+        Uri uri = Uri.withAppendedPath(FlashCardsContract.Model.getUri(mProviderVersion), Long.toString(modelId));
         final Cursor modelCursor = mResolver.query(uri, null, null, null, null);
         String[] splitFlds = null;
         try {
@@ -486,7 +504,8 @@ public final class AddContentApi {
      */
     public Map<Long, String> getModelList(int minNumFields) {
         // Get the current model
-        final Cursor allModelsCursor = mResolver.query(FlashCardsContract.Model.CONTENT_URI, null, null, null, null);
+        Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
+        final Cursor allModelsCursor = mResolver.query(authority, null, null, null, null);
         HashMap<Long, String> models = new HashMap<>();
         try {
             while (allModelsCursor.moveToNext()) {
@@ -531,7 +550,7 @@ public final class AddContentApi {
         // Create a new note
         ContentValues values = new ContentValues();
         values.put(FlashCardsContract.Deck.DECK_NAME, deckName);
-        Uri newDeckUri = mResolver.insert(FlashCardsContract.Deck.CONTENT_ALL_URI, values);
+        Uri newDeckUri = mResolver.insert(FlashCardsContract.Deck.getUri(mProviderVersion), values);
         if (newDeckUri != null) {
             long did = Long.parseLong(newDeckUri.getLastPathSegment());
             final SharedPreferences decksDb = mContext.getSharedPreferences(DECK_REF_DB, Context.MODE_PRIVATE);
@@ -547,7 +566,7 @@ public final class AddContentApi {
      * @return deck name
      */
     public String getSelectedDeckName() {
-        final Cursor selectedDeckCursor = mResolver.query(FlashCardsContract.Deck.CONTENT_SELECTED_URI,
+        final Cursor selectedDeckCursor = mResolver.query(FlashCardsContract.Deck.getSelectedUri(mProviderVersion),
                 null, null, null, null);
         String name = null;
         try {
@@ -566,7 +585,8 @@ public final class AddContentApi {
      */
     public HashMap<Long, String> getDeckList() {
         // Get the current model
-        final Cursor allDecksCursor = mResolver.query(FlashCardsContract.Deck.CONTENT_ALL_URI, null, null, null, null);
+        Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
+        final Cursor allDecksCursor = mResolver.query(authority, null, null, null, null);
         HashMap<Long, String> decks = new HashMap<>();
         try {
             while (allDecksCursor.moveToNext()) {
@@ -638,7 +658,10 @@ public final class AddContentApi {
      */
     public static String getAnkiDroidPackageName(Context context) {
         PackageManager manager = context.getPackageManager();
-        ProviderInfo pi = manager.resolveContentProvider(FlashCardsContract.AUTHORITY, 0);
+        ProviderInfo pi = manager.resolveContentProvider(FlashCardsContract.getAuthority(2), 0);
+        if (pi == null) {
+            pi = manager.resolveContentProvider(FlashCardsContract.getAuthority(1), 0);
+        }
         if (pi != null) {
             return pi.packageName;
         } else {
@@ -654,7 +677,7 @@ public final class AddContentApi {
      */
     public static String checkRequiredPermission(Context context) {
         PackageManager manager = context.getPackageManager();
-        ProviderInfo pi = manager.resolveContentProvider(FlashCardsContract.AUTHORITY, 0);
+        ProviderInfo pi = manager.resolveContentProvider(FlashCardsContract.getAuthority(2), 0);
         if (pi != null) {
             return pi.writePermission;
         } else {
@@ -693,7 +716,8 @@ public final class AddContentApi {
     public int getApiHostSpecVersion() {
         // PackageManager#resolveContentProvider docs suggest flags should be 0 (but that gives null metadata)
         // GET_META_DATA seems to work anyway
-        ProviderInfo info = mContext.getPackageManager().resolveContentProvider(FlashCardsContract.AUTHORITY, PackageManager.GET_META_DATA);
+        String authority = FlashCardsContract.getAuthority(mProviderVersion);
+        ProviderInfo info = mContext.getPackageManager().resolveContentProvider(authority, PackageManager.GET_META_DATA);
         if (info == null) {
             return -1;
         }
@@ -755,9 +779,10 @@ public final class AddContentApi {
             final String[] fieldNames = getFieldList(mid);
             NoteInfo[] result = new NoteInfo[fieldsArray.length];
             // Loop through each item in fieldsArray looking for an existing note
+            Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
             for (int i = 0; i < fieldsArray.length; i++) {
                 String sel = String.format("%s:\"%s\" note:\"%s\"", fieldNames[0], fieldsArray[i][0], modelName);
-                Cursor cursor = mResolver.query(FlashCardsContract.Note.CONTENT_URI, PROJECTION, sel, null, null);
+                Cursor cursor = mResolver.query(authority, PROJECTION, sel, null, null);
                 try {
                     if (cursor != null && cursor.moveToFirst()) {
                         result[i] = NoteInfo.buildFromCursor(cursor);
@@ -773,7 +798,7 @@ public final class AddContentApi {
     private class CompatV2 implements Compat {
         @Override
         public int addNewNotes(long did, ContentValues[] valuesArr) {
-            Uri.Builder builder = FlashCardsContract.Note.CONTENT_URI.buildUpon();
+            Uri.Builder builder = FlashCardsContract.Note.getUri(mProviderVersion).buildUpon();
             builder.appendQueryParameter(FlashCardsContract.Note.DECK_ID_QUERY_PARAM, String.valueOf(did));
             return mResolver.bulkInsert(builder.build(), valuesArr);
         }
@@ -788,7 +813,8 @@ public final class AddContentApi {
             // Query for notes that have specified model and checksum of first field matches
             String sel = String.format("%s=%d and %s in ", FlashCardsContract.Note.MID, mid, FlashCardsContract.Note.CSUM);
             String[] selArgs = {sel + Utils.ids2str(csums)};
-            Cursor notesTableCursor = mResolver.query(FlashCardsContract.Note.CONTENT_URI, PROJECTION, null, selArgs, null);
+            Uri authority = FlashCardsContract.Note.getUri(mProviderVersion);
+            Cursor notesTableCursor = mResolver.query(authority, PROJECTION, null, selArgs, null);
             if (notesTableCursor == null) {
                 return null;
             }

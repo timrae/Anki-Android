@@ -203,17 +203,15 @@
         <activity
             android:name="com.ichi2.anki.NoteEditor"
             android:configChanges="keyboardHidden|orientation|locale|screenSize"
-            android:label="@string/fact_adder_intent_title" >
+            android:label="@string/fact_adder_intent_title"
+            android:exported="false">
             <intent-filter>
                 <action android:name="org.openintents.action.CREATE_FLASHCARD" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>

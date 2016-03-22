@@ -306,6 +306,7 @@
 
         <provider
             android:name=".provider.CardContentProvider"
+            android:grantUriPermissions="true"
             android:authorities="com.ichi2.anki.flashcards"
             android:enabled="true"
             android:exported="true" >

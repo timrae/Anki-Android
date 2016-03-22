@@ -3,6 +3,7 @@
  * medium without royalty. This file is offered as-is, without any warranty.
  */
 package com.ichi2.anki;
+import android.content.Intent;
 import android.net.Uri;
 
 /**
@@ -109,6 +110,7 @@ import android.net.Uri;
 public class FlashCardsContract {
     public static final String AUTHORITY = "com.ichi2.anki.flashcards";
     public static final String READ_WRITE_PERMISSION = "com.ichi2.anki.permission.READ_WRITE_DATABASE";
+    public static final int URI_FLAGS = Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PREFIX_URI_PERMISSION;
 
     /**
      * A content:// style uri to the authority for the flash card provider

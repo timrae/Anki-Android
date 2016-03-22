@@ -99,7 +99,11 @@ public final class AddContentApi {
         values.put(FlashCardsContract.Note.MID, modelId);
         values.put(FlashCardsContract.Note.FLDS, Utils.joinFields(fields));
         values.put(FlashCardsContract.Note.TAGS, Utils.joinTags(tags));
-        return addNoteForContentValues(deckId, values);
+        Uri note = addNoteForContentValues(deckId, values);
+        if (note != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mResolver.takePersistableUriPermission(note, FlashCardsContract.URI_FLAGS);
+        }
+        return note;
     }
 
     private Uri addNoteForContentValues(long deckId, ContentValues values) {

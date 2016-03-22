@@ -22,6 +22,7 @@ package com.ichi2.anki.provider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -60,6 +61,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static com.ichi2.anki.FlashCardsContract.READ_WRITE_PERMISSION;
 
 /**
@@ -193,7 +195,7 @@ public class CardContentProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (!hasReadWritePermission() && shouldEnforceQueryOrInsertSecurity()) {
+        if (!hasReadWritePermission(uri) && shouldEnforceQueryOrInsertSecurity()) {
             throwSecurityException("query", uri);
         }
 
@@ -431,7 +433,7 @@ public class CardContentProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (!hasReadWritePermission() && shouldEnforceUpdateSecurity(uri)) {
+        if (!hasReadWritePermission(uri) && shouldEnforceUpdateSecurity(uri)) {
             throwSecurityException("update", uri);
         }
         Collection col = CollectionHelper.getInstance().getCol(mContext);
@@ -657,7 +659,7 @@ public class CardContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (!hasReadWritePermission()) {
+        if (!hasReadWritePermission(uri)) {
             throwSecurityException("delete", uri);
         }
         Collection col = CollectionHelper.getInstance().getCol(mContext);
@@ -686,7 +688,7 @@ public class CardContentProvider extends ContentProvider {
      */
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        if (!hasReadWritePermission() && shouldEnforceQueryOrInsertSecurity()) {
+        if (!hasReadWritePermission(uri) && shouldEnforceQueryOrInsertSecurity()) {
             throwSecurityException("bulkInsert", uri);
         }
 
@@ -725,7 +727,6 @@ public class CardContentProvider extends ContentProvider {
         long modelId = -1L;
         JSONObject model = null;
 
-        col.getDecks().flush(); // is it okay to move this outside the for-loop? Is it needed at all?
         SQLiteDatabase sqldb = col.getDb().getDatabase();
         try {
             int result = 0;
@@ -747,13 +748,13 @@ public class CardContentProvider extends ContentProvider {
                 String[] fldsArray = Utils.splitFields(flds);
 
                 if (model == null || thisModelId != modelId) {
-                    // new modelId so need to recalculate model, modelId and invalidate duplicateChecker (which is based on previous model)
+                    // new modelId so need to recalculate model, and modelId
                     model = col.getModels().get(thisModelId);
                     modelId = thisModelId;
                 }
 
                 // Create empty note
-                com.ichi2.libanki.Note newNote = new com.ichi2.libanki.Note(col, model); // for some reason we cannot pass modelId in here
+                com.ichi2.libanki.Note newNote = new com.ichi2.libanki.Note(col, model);
                 // Set fields
                 // Check that correct number of flds specified
                 if (fldsArray.length != newNote.getFields().length) {
@@ -774,6 +775,9 @@ public class CardContentProvider extends ContentProvider {
                     card.flush();
                 }
                 result++;
+                // Set persistent access permission for the note's URI
+                Uri newUri = Uri.withAppendedPath(FlashCardsContract.Note.CONTENT_URI, Long.toString(newNote.getId()));
+                setReadWritePermission(newUri);
             }
             col.flush(); // TODO is this necessary? Probably better to be safe than sorry
             sqldb.setTransactionSuccessful();
@@ -785,7 +789,7 @@ public class CardContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (!hasReadWritePermission() && shouldEnforceQueryOrInsertSecurity()) {
+        if (!hasReadWritePermission(uri) && shouldEnforceQueryOrInsertSecurity()) {
             throwSecurityException("insert", uri);
         }
         Collection col = CollectionHelper.getInstance().getCol(mContext);
@@ -821,7 +825,9 @@ public class CardContentProvider extends ContentProvider {
                 }
                 // Add to collection
                 col.addNote(newNote);
-                return Uri.withAppendedPath(FlashCardsContract.Note.CONTENT_URI, Long.toString(newNote.getId()));
+                Uri newUri = Uri.withAppendedPath(FlashCardsContract.Note.CONTENT_URI, Long.toString(newNote.getId()));
+                setReadWritePermission(newUri);
+                return newUri;
             }
             case NOTES_ID:
                 // Note ID is generated automatically by libanki
@@ -877,7 +883,9 @@ public class CardContentProvider extends ContentProvider {
                     mm.flush();
                     // Get the mid and return a URI
                     String mid = Long.toString(newModel.getLong("id"));
-                    return Uri.withAppendedPath(FlashCardsContract.Model.CONTENT_URI, mid);
+                    Uri modelUri = Uri.withAppendedPath(FlashCardsContract.Model.CONTENT_URI, mid);
+                    setReadWritePermission(modelUri);
+                    return modelUri;
                 } catch (ConfirmModSchemaException e) {
                     // This exception should never be thrown when inserting new models
                     Timber.e(e, "Unexpected ConfirmModSchema exception adding new model %s", modelName);
@@ -902,8 +910,10 @@ public class CardContentProvider extends ContentProvider {
                 // Insert new deck with specified name
                 String deckName = values.getAsString(FlashCardsContract.Deck.DECK_NAME);
                 did = col.getDecks().id(deckName);
-                //col.getDecks().flush(); // have not found a situation where flush() is necessary (so not adding it, yet)
-                return Uri.withAppendedPath(FlashCardsContract.Deck.CONTENT_ALL_URI, Long.toString(did));
+                col.getDecks().flush();
+                Uri deckUri = Uri.withAppendedPath(FlashCardsContract.Deck.CONTENT_ALL_URI, Long.toString(did));
+                setReadWritePermission(deckUri);
+                return deckUri;
             case DECK_SELECTED:
                 // Can't have more than one selected deck
                 throw new IllegalArgumentException("Selected deck can only be queried and updated");
@@ -1177,9 +1187,20 @@ public class CardContentProvider extends ContentProvider {
         return String.format(format, getClass().getSimpleName(), methodName, path, getCallingPackageSafe());
     }
 
-    private boolean hasReadWritePermission() {
-        // checkCallingOrSelfPermission() works even when not doing IPC, so that the provider can be used internally
-        return mContext.checkCallingOrSelfPermission(READ_WRITE_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+    private void setReadWritePermission(Uri uri) {
+        String callingPackage = getCallingPackageSafe();
+        if (callingPackage != null) {
+            int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)? (FlashCardsContract.URI_FLAGS |
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION): FlashCardsContract.URI_FLAGS;
+            mContext.grantUriPermission(callingPackage, uri, flags);
+        } else {
+            Timber.w("Could not set URI permission for %s", uri);
+        }
+    }
+
+    private boolean hasReadWritePermission(Uri uri) {
+        return mContext.checkUriPermission(uri, READ_WRITE_PERMISSION, READ_WRITE_PERMISSION, Binder.getCallingPid(),
+                Binder.getCallingUid(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == PERMISSION_GRANTED;
     }
 
 

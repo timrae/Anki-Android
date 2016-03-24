@@ -417,7 +417,7 @@ public final class AddContentApi {
         if (allModelsCursor == null) {
             return null;
         }
-        HashMap<Long, String> models = new HashMap<>();
+        Map<Long, String> models = new HashMap<>();
         try {
             while (allModelsCursor.moveToNext()) {
                 long modelId = allModelsCursor.getLong(allModelsCursor.getColumnIndex(Model._ID));
@@ -493,13 +493,13 @@ public final class AddContentApi {
      * Get a list of all the deck id / name pairs
      * @return Map of (id, name) pairs, or null if there was a problem
      */
-    public HashMap<Long, String> getDeckList() {
+    public Map<Long, String> getDeckList() {
         // Get the current model
         final Cursor allDecksCursor = mResolver.query(Deck.CONTENT_ALL_URI, null, null, null, null);
         if (allDecksCursor == null) {
             return null;
         }
-        HashMap<Long, String> decks = new HashMap<>();
+        Map<Long, String> decks = new HashMap<>();
         try {
             while (allDecksCursor.moveToNext()) {
                 long deckId = allDecksCursor.getLong(allDecksCursor.getColumnIndex(Deck.DECK_ID));

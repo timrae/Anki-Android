@@ -103,9 +103,10 @@ public class RemoteServer extends HttpSyncer {
 
 
     @Override
-    public long finish() throws UnknownHttpResponseException {
+    public long finish(boolean success) throws UnknownHttpResponseException {
+        String cmd = success ? "abort": "finish";
         try {
-            HttpResponse ret = super.req("finish", super.getInputStream("{}"));
+            HttpResponse ret = super.req(cmd, super.getInputStream("{}"));
             String s = super.stream2String(ret.getEntity().getContent());
             return Long.parseLong(s);
         } catch (NumberFormatException e) {

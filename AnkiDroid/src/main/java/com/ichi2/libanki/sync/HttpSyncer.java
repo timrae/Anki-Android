@@ -345,6 +345,10 @@ public class HttpSyncer {
 
 
     public long finish() throws UnknownHttpResponseException {
+        return finish(false);
+    }
+
+    public long finish(boolean success) throws UnknownHttpResponseException {
         return 0;
     }
 

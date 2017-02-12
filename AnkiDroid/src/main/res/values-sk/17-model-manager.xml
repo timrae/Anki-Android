@@ -46,7 +46,7 @@
   <string name="model_browser_delete">Vymazať typ poznámok</string>
   <string name="model_browser_rename">Premenovať</string>
   <string name="model_browser_options">Možnosti</string>
-  <string name="model_browser_template">Upraviť karty</string>
+  <string name="model_browser_template">Upraviť kartičky</string>
   <string name="model_browser_add">Pridať typ poznámok</string>
   <!--Rename-->
   <string name="rename_model">Premenovať model</string>
@@ -57,7 +57,7 @@
   <string name="model_field_editor_options">Možnosti poľa</string>
   <string name="model_field_editor_rename">Premenovať pole</string>
   <string name="model_field_editor_reposition_menu">Premiestniť pole</string>
-  <string name="model_field_editor_reposition" formatted="false">Premiestniť pole (zadajte hodnotu %1$d–%2$d)</string>
+  <string name="model_field_editor_reposition">Premiestniť pole (zadajte hodnotu %1$d–%2$d)</string>
   <string name="model_field_editor_changing">Aktualizácia polí</string>
   <string name="model_field_editor_sort_field">Usporiadať podľa tohto poľa</string>
   <string name="model_clone_suffix">kopírovať</string>

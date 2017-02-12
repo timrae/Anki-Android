@@ -41,7 +41,7 @@
 <resources>
   <!-- Navigation drawer items-->
   <string name="decks">デッキリスト</string>
-  <string name="card_browser">ブラウザ</string>
+  <string name="card_browser">カードブラウザ</string>
   <string name="statistics">統計</string>
   <string name="settings">設定</string>
   <string name="help">ヘルプ</string>
@@ -53,6 +53,8 @@
   <string name="studyoptions_eta">推定学習時間 (分):</string>
   <string name="studyoptions_start">学習開始</string>
   <!-- DeckPicker.java -->
+  <string name="expand">展開</string>
+  <string name="collapse">折りたたみ</string>
   <string name="study_more">さらに学習</string>
   <plurals name="deckpicker_title">
     <item quantity="other">現在の課題: %1$d枚 (%2$s)</item>
@@ -128,10 +130,10 @@
   <string name="studyoptions_limit_reached">既に一日あたりの学習枚数の上限に達しています</string>
   <string name="studyoptions_empty_schedule">このデッキでは、今日このあと予定されている課題はありません</string>
   <string name="studyoptions_congrats_finished">おめでとうございます！ このデッキの今日の課題を全て達成しました！</string>
-  <string name="studyoptions_congrats_more_rev">今日の学習上限枚数に到達しましたが、学習予定日が来ている復習カードがまだ残っています。１日の学習上限枚数は、「デッキ オプション」内の設定で変更することが出来ます。</string>
-  <string name="studyoptions_congrats_more_new">今日の学習上限枚数に到達しましたが、学習出来る新規カードがまだ残っています。１日の学習上限枚数は、「デッキ オプション」内の設定で変更することが出来ます。（新規カードの学習上限枚数が上がると、短期的に学習の負担が増えますのでご注意ください。）</string>
+  <string name="studyoptions_congrats_more_rev">予定日に達した復習カードがまだ他にも残っていますが、今日復習したカードの枚数が既に一日あたりの上限に達しています。この上限は「デッキ オプション」内の設定で変更することができます。</string>
+  <string name="studyoptions_congrats_more_new">新規カードがまだ他にも残っていますが、今日学習した新規カードの枚数が既に一日あたりの上限に達しています。この上限は「デッキ オプション」内の設定で変更することができます。（上限を上げると短期的に学習の負担が増えますのでご注意ください。）</string>
   <string name="studyoptions_congrats_custom">通常のスケジュール以外で学習するには、「カスタム学習」ボタンをタップしてください。</string>
-  <string name="studyoptions_no_cards_due">今日の課題はまだ残っていますが、どれもまだ学習予定時刻に達していません</string>
+  <string name="studyoptions_no_cards_due">このデッキの今日の課題はまだ残っていますが、どれもまだ学習予定時刻に達していません</string>
   <string name="sd_card_not_mounted">デバイスのストレージがマウントされていません</string>
   <string name="button_sync">同期</string>
   <string name="cancel_sync_confirm">同期をキャンセルしますか？</string>

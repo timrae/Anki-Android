@@ -168,7 +168,16 @@
   <string name="confirm_apkg_export_deck">Izvozi \"%s\" kot datoteko apkg?</string>
   <string name="export_in_progress">Izvažanje datoteke apkg &#8230;</string>
   <string name="export_successful_title">Pošlji apkg?</string>
-  <string name="export_successful">Datoteka \"%s\" je bila izvožena. Ali jo želite poslati?</string>
+  <string name="export_successful">Datoteka \"%s\" je bila izvožena. Ali jo želite poslati z drugim programom?</string>
+  <string name="export_email_subject">AnkiDroid exported flashcards: %s</string>
+  <string name="export_email_text">
+        <![CDATA[
+        Hi!
+        <br/><br/>
+        Ta komplet pomnilnih kartic je bil poslan iz <a href="https://ankidroid.org/docs/manual.html">AnkiDroida</a>.
+        Poskusite ga odpreti z eno od razpoložljivih <a href="http://ankisrs.net/#download">distribucij Anki</a> in uživajte v enostavnem in učinkovitem učenju!
+        ]]>
+    </string>
   <string name="export_unsuccessful">Napaka pri izvažanju zbirke</string>
   <string name="import_hint">Vstavite datoteko apkg v mapo \"%s\" in pritisnite \"V redu\", da uvozite kartice</string>
   <string name="upgrade_import_no_file_found">Nobene uvozljive datoteke %1$s ni bilo mogoče najti</string>
@@ -229,4 +238,13 @@
   <string name="decks_rename_exists">Ta komplet že obstaja</string>
   <string name="decks_rename_filtered_nosubdecks">Filtriran komplet ne more imeti podkompletov</string>
   <string name="filtered_deck_name">Filtriran komplet</string>
+  <string name="reminder_title">Ne pozabite se učiti danes!</string>
+  <plurals name="reminder_text">
+    <item quantity="one">%2$d nova kartica za pregled v %1$s</item>
+    <item quantity="two">%2$d novi kartici za pregled v %1$s</item>
+    <item quantity="few">%2$d nove kartice za pregled v %1$s</item>
+    <item quantity="other">%2$d novih kartic za pregled v %1$s</item>
+  </plurals>
+  <!-- Currently only used if exporting APKG fails -->
+  <string name="apk_share_error">Napaka pri deljenju datoteke apkg</string>
 </resources>

@@ -53,6 +53,8 @@
   <string name="studyoptions_eta">Szacowany czas (min):</string>
   <string name="studyoptions_start">Ucz się teraz</string>
   <!-- DeckPicker.java -->
+  <string name="expand">Rozwiń</string>
+  <string name="collapse">Zwiń</string>
   <string name="study_more">Studiuj więcej</string>
   <plurals name="deckpicker_title">
     <item quantity="one">Oczekuje %1$d karta z (%2$s)</item>
@@ -61,7 +63,7 @@
   </plurals>
   <plurals name="reviewer_window_title">
     <item quantity="one">Została %d minuta</item>
-    <item quantity="few">Zostało minut: %d</item>
+    <item quantity="few">Zostały %d minuty</item>
     <item quantity="other">Zostało %d minut</item>
   </plurals>
   <!-- The deck picker via AnkiStatsTaskHandler.java -->
@@ -81,8 +83,8 @@
   <string name="menu_import">Importuj</string>
   <string name="undo">Cofnij</string>
   <string name="undo_action_review">ostatnia powtórka</string>
-  <string name="undo_action_bury_card">bury card</string>
-  <string name="undo_action_bury_note">bury note</string>
+  <string name="undo_action_bury_card">zakop kartę</string>
+  <string name="undo_action_bury_note">zakop notatkę</string>
   <string name="undo_action_suspend_card">zawieszenie karty</string>
   <string name="undo_action_suspend_note">zawieszenie notatki</string>
   <string name="undo_action_delete">usunięcie notatki</string>
@@ -96,8 +98,8 @@
   <string name="menu_bury_note">Ukryj notatkę</string>
   <string name="menu_suspend_card">Zawieś kartę</string>
   <string name="menu_suspend_note">Zawieś notatkę</string>
-  <string name="menu_bury">Bury</string>
-  <string name="menu_suspend">Suspend</string>
+  <string name="menu_bury">Zakop</string>
+  <string name="menu_suspend">Zawieś</string>
   <string name="menu_delete_note">Usuń notatkę</string>
   <string name="delete_note_message">Jesteś pewny, że chcesz usunąć tę notatkę i wszystkie jej karty?\n%s</string>
   <string name="menu_select">Zaznacz tekst</string>
@@ -117,11 +119,11 @@
         alphabet.
     -->
   <string name="time_quantity_seconds">%d s</string>
-  <string name="time_quantity_minutes">%d minut</string>
-  <string name="time_quantity_hours">%d g</string>
-  <string name="time_quantity_days">%d d</string>
-  <string name="time_quantity_months">%.1f m</string>
-  <string name="time_quantity_years">%.1f r</string>
+  <string name="time_quantity_minutes">%d min</string>
+  <string name="time_quantity_hours">%d h</string>
+  <string name="time_quantity_days">%d dni</string>
+  <string name="time_quantity_months">%.1f msc</string>
+  <string name="time_quantity_years">%.1f lat</string>
   <!-- or "%.1f a" -->
   <string name="rebuild_cram_deck">Przebudowywanie talii.\nProszę czekać...</string>
   <string name="rebuild_cram_label">Odbuduj</string>
@@ -131,7 +133,7 @@
   <string name="custom_study_deck_exists">Najpierw zmień nazwę istniejącej talii nauki niestandardowej.</string>
   <string name="empty_deck">Ta talia jest pusta</string>
   <string name="studyoptions_empty">Talia jest pusta. Wybierz przycisk + żeby dodać karty.</string>
-  <string name="studyoptions_limit_reached">Dzienny limit nauki został wyczerpany</string>
+  <string name="studyoptions_limit_reached">Dzienny limit nauki został osiągnięty</string>
   <string name="studyoptions_empty_schedule">Nie ma zaplanowanych kart do nauki</string>
   <string name="studyoptions_congrats_finished">Gratulacje! Zakończono powtórki na dziś.</string>
   <string name="studyoptions_congrats_more_rev">Dzisiejszy limit powtórek został wyczerpany, ale wciąż pozostają karty do przejrzenia. Dla optymalnego zapamiętywania proszę rozważyć zwiększenie dziennego limitu w ustawieniach.</string>
@@ -143,21 +145,21 @@
   <string name="cancel_sync_confirm">Chcesz przerwać synchronizację?</string>
   <string name="continue_sync">Kontynuuj synchronizację</string>
   <string name="sync_cancelled">Synchronizacja przerwana</string>
-  <string name="sync_cancel_message">Anulowanie...\nTo może zająć troszkę czasu.</string>
+  <string name="sync_cancel_message">Anulowanie...\nTo może zająć trochę czasu.</string>
   <string name="export">Eksportuj</string>
   <string name="export_collection">Eksportuj kolekcję</string>
   <string name="export_deck">Eksportuj talię</string>
   <string name="nothing">Nic</string>
   <!-- Card template editor -->
   <string name="title_activity_template_editor">Typ karty</string>
-  <string name="card_template_editor_front">Szablon przodu</string>
-  <string name="card_template_editor_back">Szablon tyłu</string>
+  <string name="card_template_editor_front">Szablon przedni</string>
+  <string name="card_template_editor_back">Szablon tylny</string>
   <string name="card_template_editor_styling">Styl</string>
   <string name="card_template_editor_menu_delete">Usuń</string>
   <string name="card_template_editor_cant_delete">Wymagany jest przynajmniej jeden typ karty.</string>
   <plurals name="card_template_editor_confirm_delete">
     <item quantity="one">Czy usunąć typ kart “%2$s” oraz jego %1$d kartę?</item>
-    <item quantity="few">Delete the “%2$s” card type, and its %1$d cards?</item>
+    <item quantity="few">Czy usunąć typ kart “%2$s” oraz jego %1$d kart?</item>
     <item quantity="other">Czy usunąć typ kart “%2$s” oraz jego %1$d karty?</item>
   </plurals>
   <string name="invalid_template">Karta nie mogła zostać wygenerowana</string>

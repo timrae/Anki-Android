@@ -90,6 +90,11 @@
   <string name="full_screen_system">Ocultar barras de sistema</string>
   <string name="full_screen_complete">Ocultar barras de sistema e botões de resposta</string>
   <string name="full_screen_error_gestures">Você precisa habilitar os gestos para esconder os botões de resposta</string>
+  <string name="answer_buttons_position">Posição dos botões de resposta</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Topo</item>
+    <item>Final</item>
+  </string-array>
   <string name="gestures">Habilitar gestos</string>
   <string name="gestures_summ">Atribuir gestos a ações tais como responder e editar cartões.</string>
   <string name="gestures_swipe_up">Deslizar para cima</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Vibrar</string>
   <string name="notification_minimum_cards_due_blink">Luz de piscamento</string>
   <string name="timeout_answer_text">Exibir resposta automáticamente</string>
-  <string name="timeout_answer_summ">Mostrar resposta automaticamente sem entrada do usuário</string>
+  <string name="timeout_answer_summ">Mostra a resposta automaticamente sem intervenção do usuário. Inclui atraso para reprodução automatica de arquivos de áudio.</string>
   <string name="timeout_answer_seconds">Tempo para mostrar a resposta</string>
   <string name="timeout_answer_seconds_summ">XXX s</string>
   <string name="timeout_question_seconds">Tempo para mostrar próxima questão</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Mostrar a próxima revisão acima dos botões de resposta</string>
   <string name="show_progress">Mostar restantes</string>
   <string name="show_progress_summ">Mostrar contagem de cartões restantes</string>
+  <string name="show_eta">Mostrar tempo restante estimado</string>
+  <string name="show_eta_summ">Mostrar tempo restante</string>
   <string name="use_current">Baralho para novos cartões</string>
   <string name="new_spread">Posição do novo cartão</string>
   <string name="learn_cutoff">Aprender antes do limite</string>
@@ -164,11 +171,11 @@
   <string name="convert_fen_text_summ">Desenhar tabuleiro de xadrez a partir da Notação Forsyth-Edwards. A notação deve estar delimitada pelas tags [fen][/fen].</string>
   <string name="enable_api_title">Habilitar o AnkiDroid API</string>
   <string name="enable_api_summary">Deixe outros apps se conectarem ao AnkiDroid e ler / escrever dados sem a sua intervenção</string>
-  <string name="custom_buttons">App bar buttons</string>
-  <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
+  <string name="custom_buttons">Botões da App bar</string>
+  <string name="custom_buttons_summary">Customizar quais ações aparecem na app bar</string>
   <string name="custom_buttons_setting_always_show">Mostrar sempre</string>
-  <string name="custom_buttons_setting_if_room">Show if room</string>
-  <string name="custom_buttons_setting_menu_only">Menu only</string>
+  <string name="custom_buttons_setting_if_room">Mostrar se couber</string>
+  <string name="custom_buttons_setting_menu_only">Apenas o menu</string>
   <string name="reset_custom_buttons">Redefinir valores padrão</string>
   <!-- Advanced statistics settings -->
   <string name="advanced_statistics_title">Estatísticas avançadas</string>
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Revisões</string>
   <string name="deck_conf_lps_cards">Lapsos</string>
   <string name="deck_conf_general">Geral</string>
+  <string name="deck_conf_reminders">Lembretes</string>
   <string name="deck_conf_steps">Passos (em minutos)</string>
   <string name="deck_conf_order">Ordem</string>
   <string name="deck_conf_new_cards_day">Novos cartões/dia</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">cartões selecionados por</string>
   <string name="deck_conf_cram_reschedule">Remarcar</string>
   <string name="deck_conf_cram_reschedule_summ">Reagendar cartões baseado nas minhas respostas deste deck</string>
-  <string name="deck_conf_cram_steps">Passos personalizados</string>
+  <string name="deck_conf_cram_steps">Passos personalizados (em minutos)</string>
   <string name="deck_conf_cram_steps_summ">Definir passoss personalizados</string>
+  <string name="deck_conf_reminders_enabled">Habilite notificações de lembrete para este baralho</string>
+  <string name="deck_conf_reminders_time">Lembrar em</string>
 </resources>

@@ -40,8 +40,8 @@
 -->
 <resources>
   <!-- generic strings -->
-  <string name="disabled">Disabled</string>
-  <string name="enabled">Enabled</string>
+  <string name="disabled">Désactivé</string>
+  <string name="enabled">Activé</string>
   <!-- preferences.xml categories-->
   <string name="pref_cat_general">AnkiDroid</string>
   <string name="pref_cat_general_summ">Paramètres généraux</string>
@@ -51,10 +51,10 @@
   <string name="pref_cat_flashcard">Afficher</string>
   <string name="pref_cat_whiteboard">Tableau blanc</string>
   <string name="pref_cat_automatic_display">Affichage automatique de la réponse</string>
-  <string name="pref_cat_appearance">Appearance</string>
-  <string name="pref_cat_appearance_summ">Change themes and default font</string>
-  <string name="pref_cat_themes">Themes</string>
-  <string name="pref_cat_fonts">Fonts</string>
+  <string name="pref_cat_appearance">Affichage</string>
+  <string name="pref_cat_appearance_summ">Changer le thème et la police par défaut</string>
+  <string name="pref_cat_themes">Thèmes</string>
+  <string name="pref_cat_fonts">Polices</string>
   <string name="pref_cat_gestures">Gestes</string>
   <string name="pref_cat_gestures_summ">Utiliser les gestes et mouvements au lieu des boutons</string>
   <string name="pref_cat_actions">Actions</string>
@@ -71,25 +71,30 @@
   <string name="whiteboard_black_summ">Utilise moins de mémoire, mais ne fonctionne pas en mode nuit</string>
   <string name="write_answers_disable">Désactiver la saisie de la réponse</string>
   <string name="write_answers_disable_summ">Éviter au clavier d’apparaître contenant un champ « taper la réponse »</string>
-  <string name="use_input_tag">Type answer into the card</string>
-  <string name="use_input_tag_summ">Use a text input box inside the card to type in the answer</string>
+  <string name="use_input_tag">Saisir la réponse dans la carte</string>
+  <string name="use_input_tag_summ">Utiliser la saisie de la réponse directement dans la carte</string>
   <string name="text_selection_click">Solution alternative pour les appuis longs</string>
   <string name="text_selection_click_summ">Sélectionnez ceci si vous ne pouvez pas commencer une sélection de texte avec une pression longue</string>
   <string name="dictionary">Dictionnaire de recherche</string>
   <string name="reset_languages">Réinitialiser les langages</string>
-  <string name="reset_languages_summ">Reset language assignments (for text to speech and dictionaries) for all decks</string>
+  <string name="reset_languages_summ">Réinitialiser les paramètres de langue (pour le TTS et les dictionnaires) pour tous les paquets de cartes</string>
   <string name="reset_languages_question">Réinitialiser toutes les affectations de langues ?</string>
   <string name="reset_confirmation">Réinitialisation des états</string>
   <string name="card_zoom">Zoom de carte</string>
   <string name="image_zoom">Zoom d\'image</string>
   <string name="button_size">Taille des boutons de réponse</string>
   <string name="card_browser_font_size">Échelle de la police de l’explorateur</string>
-  <string name="col_path">AnkiDroid directory</string>
+  <string name="col_path">Répertoire de AnkiDroid</string>
   <string name="fullscreen_review">Mode plein écran</string>
   <string name="full_screen_off">Inactif</string>
   <string name="full_screen_system">Masquer les barres système</string>
   <string name="full_screen_complete">Masquer les barres système et les boutons de réponse</string>
   <string name="full_screen_error_gestures">Vous devez activer les gestes pour pouvoir masquer les boutons de réponse</string>
+  <string name="answer_buttons_position">Position des boutons de réponse</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Haut</item>
+    <item>Bas</item>
+  </string-array>
   <string name="gestures">Activer les gestes</string>
   <string name="gestures_summ">Assigner des gestes à des actions comme répondre et éditer des cartes.</string>
   <string name="gestures_swipe_up">Glissez vers le haut</string>
@@ -119,8 +124,8 @@
   <string name="fix_hebrew_text_summ">Solution de rechange pour afficher correctement les voyelles hébraïques.</string>
   <string name="fix_hebrew_instructions">Ce paramètre contourne l\'algorithme RTL d’Android, pour afficher correctement les voyelles.\n\nPour que ça fonctionne, vous devez téléchargez la police Tohu.ttf et la copier manuellement vers :\n%s/fonts/\n\nVous n\'aurez pas à modifier vos cartes.</string>
   <string name="fix_hebrew_download_font">Télécharger la police</string>
-  <string name="day_theme">Day theme</string>
-  <string name="night_theme">Night theme</string>
+  <string name="day_theme">Thème de jour</string>
+  <string name="night_theme">Thème de nuit</string>
   <string name="default_font">Police par défaut</string>
   <string name="override_font">Application de la police par défaut</string>
   <string name="language">Langue</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Vibrer</string>
   <string name="notification_minimum_cards_due_blink">LED de notification</string>
   <string name="timeout_answer_text">Affichage automatique de la réponse</string>
-  <string name="timeout_answer_summ">Montrer la réponse automatiquement sans action de l’utilisateur</string>
+  <string name="timeout_answer_summ">Show answer automatically without user input. Delay includes time for automatically played audio files.</string>
   <string name="timeout_answer_seconds">Temps avant d’afficher la réponse</string>
   <string name="timeout_answer_seconds_summ">XXX s</string>
   <string name="timeout_question_seconds">Temps avant de montrer la question suivante</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Afficher le temps avant la prochaine révision sur les boutons de réponse</string>
   <string name="show_progress">Afficher le nombre restant de révision</string>
   <string name="show_progress_summ">Montrer le nombre de cartes restantes</string>
+  <string name="show_eta">Afficher le temps restant</string>
+  <string name="show_eta_summ">Afficher le temps restant</string>
   <string name="use_current">Paquet utilisé pour les nouvelles cartes</string>
   <string name="new_spread">Position des nouvelles cartes</string>
   <string name="learn_cutoff">Limite d’apprentissage</string>
@@ -164,25 +171,25 @@
   <string name="convert_fen_text_summ">Échiquier avec la notation Forsyth-Edwards Notation. La notation doit être placée entre des balises [fen][/fen].</string>
   <string name="enable_api_title">Activer l\'API AnkiDroid</string>
   <string name="enable_api_summary">Laissez les autres applications se connecter à AnkiDroid et lire / écrire des données sans votre intervention</string>
-  <string name="custom_buttons">App bar buttons</string>
-  <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
-  <string name="custom_buttons_setting_always_show">Always show</string>
-  <string name="custom_buttons_setting_if_room">Show if room</string>
-  <string name="custom_buttons_setting_menu_only">Menu only</string>
-  <string name="reset_custom_buttons">Reset to default</string>
+  <string name="custom_buttons">Boutons de la barre d’application</string>
+  <string name="custom_buttons_summary">Personnaliser les actions de la barre d’application</string>
+  <string name="custom_buttons_setting_always_show">Toujours afficher</string>
+  <string name="custom_buttons_setting_if_room">Afficher s’il y a de la place</string>
+  <string name="custom_buttons_setting_menu_only">Menu uniquement</string>
+  <string name="reset_custom_buttons">Rétablir les paramètres par défaut</string>
   <!-- Advanced statistics settings -->
-  <string name="advanced_statistics_title">Advanced statistics</string>
-  <string name="enable_advanced_statistics_title">Enable advanced statistics</string>
-  <string name="enable_advanced_statistics_summ">Display forecast statistics based on a computation or simulation of future reviews (enabled) or on the future reviews already scheduled (disabled).</string>
-  <string name="advanced_forecast_stats_compute_n_days_title">Compute first n days, simulate remainder</string>
-  <string name="advanced_forecast_stats_compute_precision_title">Precision of computation</string>
-  <string name="advanced_forecast_stats_mc_n_iterations_title">Number of iterations of the simulation</string>
+  <string name="advanced_statistics_title">Statistiques avancées</string>
+  <string name="enable_advanced_statistics_title">Activer les statistiques avancées</string>
+  <string name="enable_advanced_statistics_summ">Afficher les prévisions de statistiques d’après les calculs des révisions futures (activé) ou des révisions futures déjà programmées (désactivé).</string>
+  <string name="advanced_forecast_stats_compute_n_days_title">Calculer les premiers n jours, simuler le reste</string>
+  <string name="advanced_forecast_stats_compute_precision_title">Précision du calcul</string>
+  <string name="advanced_forecast_stats_mc_n_iterations_title">Nombres d’essais de simulation</string>
   <!-- Custom sync server settings -->
-  <string name="custom_sync_server_title">Custom sync server</string>
-  <string name="custom_sync_server_enable_title">Use custom sync server</string>
-  <string name="custom_sync_server_enable_summary">If you don\'t want to use the proprietary AnkiWeb service you can specify an alternative server here</string>
-  <string name="custom_sync_server_base_url_title">Sync url</string>
-  <string name="custom_sync_server_media_url_title">Media sync url</string>
+  <string name="custom_sync_server_title">Serveur de synchronisation personnalisé</string>
+  <string name="custom_sync_server_enable_title">Utiliser un serveur de synchronisation personnalisé</string>
+  <string name="custom_sync_server_enable_summary">Si vous ne souhaitez pas utiliser le service propriétaire AnkiWeb, vous pouvez spécifiez ici un serveur alternatif</string>
+  <string name="custom_sync_server_base_url_title">Synchroniser l’URL</string>
+  <string name="custom_sync_server_media_url_title">Synchroniser l’URL pour les médias</string>
   <!-- studyoptions -->
   <string name="studyoptions_limit_select_tags">Sélectionner les étiquettes</string>
   <!-- Deck configurations -->
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Révisions</string>
   <string name="deck_conf_lps_cards">Intervalles</string>
   <string name="deck_conf_general">Général</string>
+  <string name="deck_conf_reminders">Reminders</string>
   <string name="deck_conf_steps">Intervalle (en minutes)</string>
   <string name="deck_conf_order">Ordre</string>
   <string name="deck_conf_new_cards_day">Nouvelles cartes par jour</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">Cartes sélectionnées par</string>
   <string name="deck_conf_cram_reschedule">Replanifier</string>
   <string name="deck_conf_cram_reschedule_summ">Replanifier les cartes selon mes réponses dans ce paquet</string>
-  <string name="deck_conf_cram_steps">Pas personnalisé</string>
+  <string name="deck_conf_cram_steps">Custom steps (in minutes)</string>
   <string name="deck_conf_cram_steps_summ">Définir le pas personnalisé</string>
+  <string name="deck_conf_reminders_enabled">Enable reminder notifications for this deck</string>
+  <string name="deck_conf_reminders_time">Remind at</string>
 </resources>

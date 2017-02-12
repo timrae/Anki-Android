@@ -39,7 +39,7 @@
 ~ this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-  <string name="backup_deck_no_space_left">Последнее резервное копирование не было выполненно из-за отсутствия места на SD карте.\n\nОсвободите место или снизьте глубину резервного копирования.</string>
+  <string name="backup_deck_no_space_left">Резервное копирование не выполнено из-за недостатка свободного места на SD карте.\n\nОсвободите место на карте или уменьшите число резервных копий.</string>
   <string name="sd_space_warning">Осталось меньше %d МБ на вашей SD-карте.\nОсвободите немного места, чтобы избежать потери данных.</string>
   <string name="backup_delete">Удаление резервных копий.\nПожалуйста подождите...</string>
   <string name="backup_restore">Восстановить из резервной копии</string>
@@ -63,5 +63,5 @@
   <string name="corrupt_db_message">К сожалению, ваша коллекция повреждена. \n\nВыберите в меню пункт \"Восстановить из резервной копии\". Если это не поможет, обратитесь к следующей инструкции для ручного восстановления: \n%1$s</string>
   <string name="access_collection_failed_message">Произошла ошибка при доступе к вашей коллекции. \n\nПопробуйте запустить проверку базы данных или восстановление из резервной копии. Если это не поможет, пожалуйста, отправьте сообщение об ошибке: \n%1$s</string>
   <string name="deck_repair_error">Коллекция не может быть исправлена</string>
-  <string name="cursor_size_limit_exceeded">The Android size limit for a String in a database has been exceeded. Delete any unused note types using Anki desktop, then do a full sync.</string>
+  <string name="cursor_size_limit_exceeded">Превышена предельная длина строки в базе данных. Удалите все неиспользуемые типы заметок используя Anki Desktop, а затем выполните полную синхронизацию.</string>
 </resources>

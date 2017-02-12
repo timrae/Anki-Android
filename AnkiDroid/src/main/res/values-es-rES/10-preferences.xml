@@ -90,8 +90,13 @@
   <string name="full_screen_system">Ocultar las barras de sistema</string>
   <string name="full_screen_complete">Ocultar las barras de sistema y los botones de respuesta</string>
   <string name="full_screen_error_gestures">Hay que habilitar los gestos para ocultar los botones de respuesta</string>
+  <string name="answer_buttons_position">Answer buttons position</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Top</item>
+    <item>Bottom</item>
+  </string-array>
   <string name="gestures">Habilitar gestos</string>
-  <string name="gestures_summ">Asignar gestos a acciones tales como contestaro editar tarjetas.</string>
+  <string name="gestures_summ">Asignar gestos a acciones tales como contestar o editar tarjetas.</string>
   <string name="gestures_swipe_up">Deslizar hacia arriba</string>
   <string name="gestures_swipe_down">Deslizar hacia abajo</string>
   <string name="gestures_swipe_left">Deslizar hacia la izquierda</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Vibración</string>
   <string name="notification_minimum_cards_due_blink">Parpadeo de luz</string>
   <string name="timeout_answer_text">Visualización automática de la respuesta</string>
-  <string name="timeout_answer_summ">Mostrar la respuesta automáticamente sin interacción del usuario</string>
+  <string name="timeout_answer_summ">Show answer automatically without user input. Delay includes time for automatically played audio files.</string>
   <string name="timeout_answer_seconds">Tiempo para mostrar respuesta</string>
   <string name="timeout_answer_seconds_summ">XXX s</string>
   <string name="timeout_question_seconds">Tiempo para mostrar la siguiente pregunta</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Mostrar el próximo repaso en los botones de respuesta</string>
   <string name="show_progress">Mostrar restante</string>
   <string name="show_progress_summ">Mostrar contador de tarjetas restantes</string>
+  <string name="show_eta">Show ETA</string>
+  <string name="show_eta_summ">Mostrar el tiempo restante</string>
   <string name="use_current">Mazo para las nuevas tarjetas</string>
   <string name="new_spread">Posición de nuevas tarjetas</string>
   <string name="learn_cutoff">Aprender por delante del límite</string>
@@ -164,8 +171,8 @@
   <string name="convert_fen_text_summ">Tablero de dibujo de notación de Forsyth-Edwards. La notación debe adjuntar etiquetas del [fen][/fen].</string>
   <string name="enable_api_title">Habilitar API de AnkiDroid</string>
   <string name="enable_api_summary">Permitir que otras aplicaciones conecten a AnkiDroid y lean / escriban datos sin tu intervención</string>
-  <string name="custom_buttons">App bar buttons</string>
-  <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
+  <string name="custom_buttons">Botones de la barra de la aplicación</string>
+  <string name="custom_buttons_summary">Personalizar qué acciones aparecen en la barra de la aplicación</string>
   <string name="custom_buttons_setting_always_show">Mostrar siempre</string>
   <string name="custom_buttons_setting_if_room">Mostrar si hay espacio</string>
   <string name="custom_buttons_setting_menu_only">Sólo el menú</string>
@@ -173,7 +180,7 @@
   <!-- Advanced statistics settings -->
   <string name="advanced_statistics_title">Estadísticas avanzadas</string>
   <string name="enable_advanced_statistics_title">Activar estadísticas avanzadas</string>
-  <string name="enable_advanced_statistics_summ">Display forecast statistics based on a computation or simulation of future reviews (enabled) or on the future reviews already scheduled (disabled).</string>
+  <string name="enable_advanced_statistics_summ">Despliega estadísticas de pronóstico basadas en un cálculo o simulación de futuros repasos (activado) o de repasos futuros ya programados (desactivado).</string>
   <string name="advanced_forecast_stats_compute_n_days_title">Calcular primeros n días, simular el resto</string>
   <string name="advanced_forecast_stats_compute_precision_title">Precisión de la computación</string>
   <string name="advanced_forecast_stats_mc_n_iterations_title">Número de iteraciones de la simulación</string>
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Repasos</string>
   <string name="deck_conf_lps_cards">Lapsos</string>
   <string name="deck_conf_general">General</string>
+  <string name="deck_conf_reminders">Reminders</string>
   <string name="deck_conf_steps">Pasos (en minutos)</string>
   <string name="deck_conf_order">Orden</string>
   <string name="deck_conf_new_cards_day">Nuevas tarjetas/día</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">tarjetas seleccionadas por</string>
   <string name="deck_conf_cram_reschedule">Reprogramar</string>
   <string name="deck_conf_cram_reschedule_summ">Reprogramar tarjetas en base a mis respuestas en este mazo</string>
-  <string name="deck_conf_cram_steps">Pasos personalizados</string>
+  <string name="deck_conf_cram_steps">Custom steps (in minutes)</string>
   <string name="deck_conf_cram_steps_summ">Definir pasos personalizados</string>
+  <string name="deck_conf_reminders_enabled">Enable reminder notifications for this deck</string>
+  <string name="deck_conf_reminders_time">Remind at</string>
 </resources>

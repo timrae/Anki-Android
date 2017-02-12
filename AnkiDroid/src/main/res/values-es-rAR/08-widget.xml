@@ -53,4 +53,15 @@
     <item quantity="other">%1$d mazos</item>
   </plurals>
   <string name="widget_small">AnkiDroid pequeño</string>
+  <string name="widget_small_button">AnkiDroid</string>
+  <plurals name="widget_cards_due">
+    <item quantity="one">%d tarjeta programada</item>
+    <item quantity="other">%d tarjetas programadas</item>
+  </plurals>
+  <plurals name="widget_eta">
+    <item quantity="one">%d minuto restante</item>
+    <item quantity="other">%d minutos restantes</item>
+  </plurals>
+  <string name="widget_add_note">Añadir nota</string>
+  <string name="widget_add_note_button">Añadir nueva nota de Ankidroid</string>
 </resources>

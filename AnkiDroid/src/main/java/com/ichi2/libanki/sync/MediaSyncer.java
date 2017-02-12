@@ -101,13 +101,9 @@ public class MediaSyncer {
             mCol.log("last local usn is " + lastUsn);
             mDownloadCount = 0;
             while (true) {
-                // Allow cancellation
+                // Allow cancellation (note: media sync has no finish command, so just throw)
                 if (Connection.getIsCancelled()) {
                     Timber.i("Sync was cancelled");
-                    try {
-                        mServer.finish();
-                    } catch (UnknownHttpResponseException e) {
-                    }
                     throw new RuntimeException("UserAbortedSync");
                 }
                 JSONArray data = mServer.mediaChanges(lastUsn);
@@ -119,9 +115,19 @@ public class MediaSyncer {
                 List<String> need = new ArrayList<>();
                 lastUsn = data.getJSONArray(data.length()-1).getInt(1);
                 for (int i = 0; i < data.length(); i++) {
+                    // Allow cancellation (note: media sync has no finish command, so just throw)
+                    if (Connection.getIsCancelled()) {
+                        Timber.i("Sync was cancelled");
+                        throw new RuntimeException("UserAbortedSync");
+                    }
                     String fname = data.getJSONArray(i).getString(0);
                     int rusn = data.getJSONArray(i).getInt(1);
-                    String rsum = data.getJSONArray(i).optString(2);
+                    String rsum = null;
+                    if (!data.getJSONArray(i).isNull(2)) {
+                        // If `rsum` is a JSON `null` value, `.optString(2)` will
+                        // return `"null"` as a string
+                        rsum = data.getJSONArray(i).optString(2);
+                    }
                     Pair<String, Integer> info = mCol.getMedia().syncInfo(fname);
                     String lsum = info.first;
                     int ldirty = info.second;
@@ -145,7 +151,7 @@ public class MediaSyncer {
                         
                     } else if (!TextUtils.isEmpty(lsum)) {
                         // deleted remotely
-                        if (ldirty != 0) {
+                        if (ldirty == 0) {
                             mCol.log("delete local");
                             mCol.getMedia().syncDelete(fname);
                         } else {

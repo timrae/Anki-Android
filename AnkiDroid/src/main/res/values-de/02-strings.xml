@@ -161,14 +161,23 @@
   <string name="confirm_apkg_export">Sammlung als apkg-Datei exportieren?</string>
   <string name="confirm_apkg_export_deck">»%s« als apkg-Datei exportieren?</string>
   <string name="export_in_progress">Exportiere apkg-Datei&#8230;</string>
-  <string name="export_successful_title">Apkg-Datei per E-Mail senden?</string>
-  <string name="export_successful">Datei »%s« wurde exportiert. Wollen Sie sie e-mailen?</string>
+  <string name="export_successful_title">Send apkg?</string>
+  <string name="export_successful">File “%s” was exported. Do you want to send it with another app?</string>
+  <string name="export_email_subject">AnkiDroid exported flashcards: %s</string>
+  <string name="export_email_text">
+        <![CDATA[
+        Hi!
+        <br/><br/>
+        Dies ist ein Stapel Anki-Lernkarten gesendet von <a href="https://ankidroid.org/docs/manual.html">AnkiDroid</a>.
+        Versuche es mit einer der verfügbaren <a href="http://ankisrs.net/#download">Anki-Distributionen</a> zu öffnen und genieße einfaches und effektives Lernen!
+        ]]>
+    </string>
   <string name="export_unsuccessful">Fehler beim Exportieren der Sammlung</string>
   <string name="import_hint">Kopieren Sie die apkg-Datei ins Verzeichnis »%s« und berühren Sie »OK«, um Karten zu importieren</string>
   <string name="upgrade_import_no_file_found">Keine importierbare Datei %1$s gefunden</string>
   <string name="study_options">Stapeloptionen</string>
   <string name="select_tts">Vorlesesprache festlegen</string>
-  <string name="custom_study">Benutzerdefiniertes Lernen</string>
+  <string name="custom_study">Benutzer&#173;de&#173;fi&#173;nier&#173;tes Lernen</string>
   <string name="more_options">Mehr</string>
   <string name="dyn_deck_desc">Dies ist ein besonderer Stapel, um außerhalb des normalen Lehrplans zu lernen. Karten werden nach dem Lernen automatisch in ihren ursprünglichen Stapel zurückgeschickt. Beim Löschen dieses Stapels werden alle verbleibenden Karten in ihren ursprünglichen Stapel zurückgeschickt.</string>
   <string name="steps_error">Die Schrittanzahl muss größer als 0 sein</string>
@@ -211,4 +220,11 @@
   <string name="decks_rename_exists">Diesen Stapel gibt es schon</string>
   <string name="decks_rename_filtered_nosubdecks">Ein gefilterter Stapel kann keine Unterstapel enthalten.</string>
   <string name="filtered_deck_name">Gefilterter Stapel</string>
+  <string name="reminder_title">Do not forget to study today!</string>
+  <plurals name="reminder_text">
+    <item quantity="one">%2$d new card to review in %1$s</item>
+    <item quantity="other">%2$d new cards to review in %1$s</item>
+  </plurals>
+  <!-- Currently only used if exporting APKG fails -->
+  <string name="apk_share_error">Error sharing apkg file</string>
 </resources>

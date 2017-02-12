@@ -156,7 +156,10 @@ public class ChartBuilder {
         double yTicks = ticksCalcY(desiredPixelDistanceBetweenTicks, rect, 0, mMaxCards * Y_AXIS_STRETCH_FACTOR);
         setupYaxis(plotSheet, hiddenPlotSheet, yTicks, mAxisTitles[1], false, true);
 
-        if(mCumulative != null) {
+        //0 = X-axis title
+        //1 = Y-axis title left
+        //2 = Y-axis title right (optional)
+        if(mAxisTitles.length == 3) {
             double rightYtics = ticsCalc(desiredPixelDistanceBetweenTicks, rect, mMcount * Y_AXIS_STRETCH_FACTOR);
             setupYaxis(plotSheet, hiddenPlotSheet, rightYtics, mAxisTitles[2], true, true);
         }
@@ -167,13 +170,12 @@ public class ChartBuilder {
 
 
     private PlotSheet createPieChart(PlotSheet plotSheet) {
-        PieChart pieChart = new PieChart(plotSheet, mSeriesList[0]);
-
         ColorWrap[] colors = {new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[0])),
                               new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[1])),
                               new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[2])),
                               new ColorWrap(Themes.getColorFromAttr(mChartView.getContext(), mColors[3]))};
-        pieChart.setColors(colors);
+
+        PieChart pieChart = new PieChart(plotSheet, mSeriesList[0], colors);
         pieChart.setName(mChartView.getResources().getString(mValueLabels[0]) + ": " + (int) mSeriesList[0][0]);
         LegendDrawable legendDrawable1 = new LegendDrawable();
         LegendDrawable legendDrawable2 = new LegendDrawable();

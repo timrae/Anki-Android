@@ -158,8 +158,16 @@
   <string name="confirm_apkg_export">コレクション（全デッキ）を anki形式のファイル \"collection.apkg\" としてエクスポートします。よろしいですか？</string>
   <string name="confirm_apkg_export_deck">\"%s\" を apkgファイルとしてエクスポートしますか？</string>
   <string name="export_in_progress">apkgファイルをエクスポートしています...</string>
-  <string name="export_successful_title">apkg ファイルをメールで送信しますか？</string>
-  <string name="export_successful">データがファイル \"%s\" としてエクスポートされました。メールで送信しますか？</string>
+  <string name="export_successful_title">Send apkg?</string>
+  <string name="export_successful">File “%s” was exported. Do you want to send it with another app?</string>
+  <string name="export_email_subject">AnkiDroid exported flashcards: %s</string>
+  <string name="export_email_text">
+<![CDATA[
+こんにちは！
+<br/> <br/>
+これは、<a href="https://ankidroid.org/docs/manual.html"> AnkiDroid</a> から送信された、Anki用フラッシュカードデッキです。
+<a href="http://ankisrs.net/#download">こちら</a>であなたの端末機器に対応したAnki用ソフトをインストールしてこのデッキを開き、簡単で効率的な学習をお楽しみください！
+]]>    </string>
   <string name="export_unsuccessful">コレクションのエクスポート エラー</string>
   <string name="import_hint">取り込みたいデッキまたはコレクション（全デッキ）のファイル（*. apkg）をあらかじめ \"%s\" に保存した後、この画面で「OK」ボタンをタップしてください。</string>
   <string name="upgrade_import_no_file_found">読み込み可能な %1$s のファイルが見つかりません</string>
@@ -167,7 +175,7 @@
   <string name="select_tts">テキスト読み上げ機能の言語設定</string>
   <string name="custom_study">カスタム学習</string>
   <string name="more_options">その他</string>
-  <string name="dyn_deck_desc">これは標準のスケジュールから外れて学習する特別なデッキです。 復習が終わったカードは自動的に元のデッキに戻ります。 このデッキを削除すると、残っていたカードも全て元のデッキに戻ります。</string>
+  <string name="dyn_deck_desc">これは標準のスケジュールから外れて学習する特別なデッキです。 復習が終わったカードは自動的に元のデッキに戻ります。 このデッキを削除すると、残りのカードも全て元のデッキに戻ります。</string>
   <string name="steps_error">学習ステップには1以上の数字を入力してください</string>
   <string name="steps_min_error">少なくとも 1 つの学習ステップが必要です。</string>
   <string name="sched_end">（終了）</string>
@@ -202,4 +210,10 @@
   <string name="decks_rename_exists">そのデッキ名は既に使用されています</string>
   <string name="decks_rename_filtered_nosubdecks">フィルターデッキ内にはサブデッキを作成できません</string>
   <string name="filtered_deck_name">フィルターデッキ</string>
+  <string name="reminder_title">今日も学習しましょう！</string>
+  <plurals name="reminder_text">
+    <item quantity="other">課題: %2$d枚 （%1$s）</item>
+  </plurals>
+  <!-- Currently only used if exporting APKG fails -->
+  <string name="apk_share_error">Error sharing apkg file</string>
 </resources>

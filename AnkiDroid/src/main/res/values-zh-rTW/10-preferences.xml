@@ -90,6 +90,11 @@
   <string name="full_screen_system">Hide the system bars</string>
   <string name="full_screen_complete">Hide the system bars and answer buttons</string>
   <string name="full_screen_error_gestures">You must enable gestures to hide the answer buttons</string>
+  <string name="answer_buttons_position">Answer buttons position</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Top</item>
+    <item>Bottom</item>
+  </string-array>
   <string name="gestures">開啓手勢</string>
   <string name="gestures_summ">替動作設定手勢，像是回答問題和編輯卡片。</string>
   <string name="gestures_swipe_up">向上撥動</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">震動</string>
   <string name="notification_minimum_cards_due_blink">提示燈</string>
   <string name="timeout_answer_text">自動顯示答案</string>
-  <string name="timeout_answer_summ">使用者不需輸入，自動顯示答案</string>
+  <string name="timeout_answer_summ">Show answer automatically without user input. Delay includes time for automatically played audio files.</string>
   <string name="timeout_answer_seconds">顯示答案的時間</string>
   <string name="timeout_answer_seconds_summ">XXX 秒</string>
   <string name="timeout_question_seconds">顯示下一題的時間</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">在答案按鈕上顯示下一次複習的時間</string>
   <string name="show_progress">顯示剩餘數量</string>
   <string name="show_progress_summ">顯示剩餘卡片數量</string>
+  <string name="show_eta">Show ETA</string>
+  <string name="show_eta_summ">Show remaining time</string>
   <string name="use_current">存放新卡片的牌組</string>
   <string name="new_spread">新卡片的位置</string>
   <string name="learn_cutoff">提早學習上限</string>
@@ -195,6 +202,7 @@
   <string name="deck_conf_rev_cards">複習次數</string>
   <string name="deck_conf_lps_cards">忘記</string>
   <string name="deck_conf_general">一般</string>
+  <string name="deck_conf_reminders">Reminders</string>
   <string name="deck_conf_steps">步(單位是分鐘)</string>
   <string name="deck_conf_order">順序</string>
   <string name="deck_conf_new_cards_day">新卡片/每天</string>
@@ -246,6 +254,8 @@
   <string name="deck_conf_cram_order">依條件選擇卡片</string>
   <string name="deck_conf_cram_reschedule">重新排程</string>
   <string name="deck_conf_cram_reschedule_summ">依據我在本牌組的回答狀況來重新排程卡片</string>
-  <string name="deck_conf_cram_steps">自訂步數</string>
+  <string name="deck_conf_cram_steps">Custom steps (in minutes)</string>
   <string name="deck_conf_cram_steps_summ">設定自訂步數</string>
+  <string name="deck_conf_reminders_enabled">Enable reminder notifications for this deck</string>
+  <string name="deck_conf_reminders_time">Remind at</string>
 </resources>

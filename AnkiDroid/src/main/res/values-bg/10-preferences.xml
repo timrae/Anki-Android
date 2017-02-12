@@ -90,6 +90,11 @@
   <string name="full_screen_system">Скриване на системните ленти</string>
   <string name="full_screen_complete">Скриване на системните ленти и бутоните за отговори</string>
   <string name="full_screen_error_gestures">Трябва да разрешите жестове, за да скриете бутоните на отговор</string>
+  <string name="answer_buttons_position">Answer buttons position</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Top</item>
+    <item>Bottom</item>
+  </string-array>
   <string name="gestures">Разреши жестове</string>
   <string name="gestures_summ">Използване на жестове за такива действия като отговор и редактиране на карти.</string>
   <string name="gestures_swipe_up">Натискане нагоре</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Вибрация</string>
   <string name="notification_minimum_cards_due_blink">Мигаща светлина</string>
   <string name="timeout_answer_text">Автоматично  показване на отговор</string>
-  <string name="timeout_answer_summ">Покажи отговора автоматично, без въвеждане от потребителя</string>
+  <string name="timeout_answer_summ">Show answer automatically without user input. Delay includes time for automatically played audio files.</string>
   <string name="timeout_answer_seconds">Време за показване на отговора</string>
   <string name="timeout_answer_seconds_summ">ХХХ с</string>
   <string name="timeout_question_seconds">Време за показване на следващия въпрос</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Показване на времето за следващото повторение над бутоните за отговор</string>
   <string name="show_progress">Показване на оставащото</string>
   <string name="show_progress_summ">Показване на брояч на оставащите карти</string>
+  <string name="show_eta">Show ETA</string>
+  <string name="show_eta_summ">Show remaining time</string>
   <string name="use_current">Тесте за нови карти</string>
   <string name="new_spread">Нова позиция на картите</string>
   <string name="learn_cutoff">Учене над лимита</string>
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Разглеждания</string>
   <string name="deck_conf_lps_cards">Пропуски</string>
   <string name="deck_conf_general">Общо</string>
+  <string name="deck_conf_reminders">Reminders</string>
   <string name="deck_conf_steps">Стъпки (в минути)</string>
   <string name="deck_conf_order">Ред</string>
   <string name="deck_conf_new_cards_day">Нови карти на ден</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">карти, избрани от</string>
   <string name="deck_conf_cram_reschedule">Повторно планиране</string>
   <string name="deck_conf_cram_reschedule_summ">Пренасрочване карти на базата на моите отговори в това тесте</string>
-  <string name="deck_conf_cram_steps">Потребителски стъпки</string>
+  <string name="deck_conf_cram_steps">Custom steps (in minutes)</string>
   <string name="deck_conf_cram_steps_summ">Определяне потребителски стъпки</string>
+  <string name="deck_conf_reminders_enabled">Enable reminder notifications for this deck</string>
+  <string name="deck_conf_reminders_time">Remind at</string>
 </resources>

@@ -90,6 +90,11 @@
   <string name="full_screen_system">Ocultar las barras del sistema</string>
   <string name="full_screen_complete">Ocultar las barras del sistema y los botones de respuesta</string>
   <string name="full_screen_error_gestures">Debe habilitar los gestos para ocultar los botones de respuesta</string>
+  <string name="answer_buttons_position">Posición de los botones de respuesta</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Arriba</item>
+    <item>Abajo</item>
+  </string-array>
   <string name="gestures">Habilitar gestos</string>
   <string name="gestures_summ">Asignar gestos a acciones tales como contestar o editar tarjetas.</string>
   <string name="gestures_swipe_up">Deslizar hacia arriba</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Vibrar</string>
   <string name="notification_minimum_cards_due_blink">Luz parpadeante</string>
   <string name="timeout_answer_text">Mostrar automáticamente la respuesta</string>
-  <string name="timeout_answer_summ">Mostrar la respuesta automáticamente sin interacción del usuario</string>
+  <string name="timeout_answer_summ">Mostrar respuesta automáticamente sin intervención del usuario. Retraso incluye tiempo para archivos de audio automáticamente reproducidas.</string>
   <string name="timeout_answer_seconds">Tiempo para mostrar respuesta</string>
   <string name="timeout_answer_seconds_summ">XXX s</string>
   <string name="timeout_question_seconds">Tiempo para mostrar la siguiente pregunta</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Mostrar el tiempo para el próximo repaso encima de los botones de respuesta</string>
   <string name="show_progress">Mostar restantes</string>
   <string name="show_progress_summ">Mostrar contador de tarjetas restantes</string>
+  <string name="show_eta">Mostrar ETA</string>
+  <string name="show_eta_summ">Mostrar tiempo restante</string>
   <string name="use_current">Mazo para nuevas tarjetas</string>
   <string name="new_spread">Nueva posición de tarjeta</string>
   <string name="learn_cutoff">Aprender antes del límite</string>
@@ -164,8 +171,8 @@
   <string name="convert_fen_text_summ">Dibujar un tablero de ajedrez a partir de la notación de Edward Forsyth. La notación debe estar enmarcada en una etiqueta que contenga [fen][/fen].</string>
   <string name="enable_api_title">Habilitar API de AnkiDroid</string>
   <string name="enable_api_summary">Permitir que otras aplicaciones se conecten a AnkiDroid y lean / escriban datos sin tu intervención</string>
-  <string name="custom_buttons">App bar buttons</string>
-  <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
+  <string name="custom_buttons">Botones de la barra de la aplicación</string>
+  <string name="custom_buttons_summary">Personalizar qué acciones aparecen en la barra de la aplicación</string>
   <string name="custom_buttons_setting_always_show">Mostrar siempre</string>
   <string name="custom_buttons_setting_if_room">Mostrar si hay espacio</string>
   <string name="custom_buttons_setting_menu_only">Sólo el menú</string>
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Revisiones</string>
   <string name="deck_conf_lps_cards">Intervalos</string>
   <string name="deck_conf_general">General</string>
+  <string name="deck_conf_reminders">Recordatorios</string>
   <string name="deck_conf_steps">Pasos (en minutos)</string>
   <string name="deck_conf_order">Orden</string>
   <string name="deck_conf_new_cards_day">Nuevas tarjetas por día</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">Tarjetas seleccionadas por</string>
   <string name="deck_conf_cram_reschedule">Reprogramar</string>
   <string name="deck_conf_cram_reschedule_summ">Reprogramar las tarjetas basándose en mis respuestas en este mazo</string>
-  <string name="deck_conf_cram_steps">Pasos personalizados</string>
+  <string name="deck_conf_cram_steps">Pasos personalizados (en minutos)</string>
   <string name="deck_conf_cram_steps_summ">Definir pasos personalizados</string>
+  <string name="deck_conf_reminders_enabled">Activar notificaciones de recordatorio para este mazo</string>
+  <string name="deck_conf_reminders_time">Recordarme a las</string>
 </resources>

@@ -53,4 +53,15 @@
     <item quantity="other">%1$d mazzi</item>
   </plurals>
   <string name="widget_small">AnkiDroid piccolo</string>
+  <string name="widget_small_button">AnkiDroid</string>
+  <plurals name="widget_cards_due">
+    <item quantity="one">%d carta scaduta</item>
+    <item quantity="other">%d carte scadute</item>
+  </plurals>
+  <plurals name="widget_eta">
+    <item quantity="one">%d minuto rimasto</item>
+    <item quantity="other">%d minuti rimasti</item>
+  </plurals>
+  <string name="widget_add_note">Aggiungi nota</string>
+  <string name="widget_add_note_button">Aggiungi nuova nota AnkiDroid</string>
 </resources>

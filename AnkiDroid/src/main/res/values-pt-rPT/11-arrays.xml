@@ -78,7 +78,7 @@
     <item>Ordem de adição</item>
     <item>Ordem de revisão</item>
     <item>Primeiro, a última adicionada</item>
-    <item>Relative overdueness</item>
+    <item>Atrasos relativos</item>
   </string-array>
   <string-array name="add_to_cur_labels">
     <item>Usar o baralho atual</item>
@@ -94,11 +94,11 @@
     <item>Sempre</item>
   </string-array>
   <string-array name="day_theme_labels">
-    <item>Light</item>
+    <item>Claro</item>
     <item>Plain</item>
   </string-array>
   <string-array name="night_theme_labels">
-    <item>Black</item>
-    <item>Dark</item>
+    <item>Negro</item>
+    <item>Escuro</item>
   </string-array>
 </resources>

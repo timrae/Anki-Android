@@ -6,12 +6,12 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.Html;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
@@ -21,6 +21,10 @@ import com.ichi2.anki.R;
 import com.ichi2.compat.customtabs.CustomTabActivityHelper;
 import com.ichi2.compat.customtabs.CustomTabsFallback;
 import com.ichi2.compat.customtabs.CustomTabsHelper;
+
+import java.io.File;
+
+import io.requery.android.database.sqlite.SQLiteDatabase;
 
 /** Implementation of {@link Compat} for SDK level 16 */
 @TargetApi(16)
@@ -84,5 +88,16 @@ public class CompatV16 extends CompatV15 implements Compat {
         CustomTabsIntent customTabsIntent = builder.build();
         CustomTabsHelper.addKeepAliveExtra(activity, customTabsIntent.intent);
         CustomTabActivityHelper.openCustomTab(activity, customTabsIntent, uri, new CustomTabsFallback());
+    }
+
+    @Override
+    public boolean deleteDatabase(File db) {
+        return SQLiteDatabase.deleteDatabase(db);
+    }
+
+    @Override
+    public Uri getExportUri(Context context, File file) {
+        // Use FileProvider for exporting (this requires Jellybean for reliable sending via migrateExtraStreamtoClipData())
+        return FileProvider.getUriForFile(context, "com.ichi2.anki.apkgfileprovider", file);
     }
 }

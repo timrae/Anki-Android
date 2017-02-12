@@ -54,7 +54,7 @@
   <string name="pref_cat_appearance">Erscheinungsbild</string>
   <string name="pref_cat_appearance_summ">Themes und Standard-Schriftart ändern</string>
   <string name="pref_cat_themes">Themes</string>
-  <string name="pref_cat_fonts">Fonts</string>
+  <string name="pref_cat_fonts">Schriftarten</string>
   <string name="pref_cat_gestures">Gesten</string>
   <string name="pref_cat_gestures_summ">Berühren und Wischen statt Schaltflächen verwenden</string>
   <string name="pref_cat_actions">Aktionen</string>
@@ -90,6 +90,11 @@
   <string name="full_screen_system">Systemzeilen verbergen</string>
   <string name="full_screen_complete">Systemzeilen und Antwortschaltflächen verbergen</string>
   <string name="full_screen_error_gestures">Gesten müssen aktiviert sein, um die Antwortschaltflächen zu verbergen</string>
+  <string name="answer_buttons_position">Position der Antwortschaltflächen</string>
+  <string-array name="answer_buttons_position_labels">
+    <item>Oberseite</item>
+    <item>Unterseite</item>
+  </string-array>
   <string name="gestures">Gesten aktivieren</string>
   <string name="gestures_summ">Weise Aktionen, wie zum Beispiel Beantworten oder Bearbeiten der Karten, Gesten zu.</string>
   <string name="gestures_swipe_up">Nach oben wischen</string>
@@ -119,8 +124,8 @@
   <string name="fix_hebrew_text_summ">Übergangslösung um hebräische Vokale korrekt anzuzeigen.</string>
   <string name="fix_hebrew_instructions">Diese Einstellung umgeht den RTL-Algorithmus von Android, um hebräischen Text mit Vokalen korrekt anzuzeigen.\n\nDamit dies funktioniert, müssen Sie die Schriftart Tohu.ttf herunterladen und manuell in dieses Verzeichnis kopieren:\n»%s/font/«\n\nIhre Karten müssen Sie dafür nicht ändern.</string>
   <string name="fix_hebrew_download_font">Schrift herunterladen</string>
-  <string name="day_theme">Day theme</string>
-  <string name="night_theme">Night theme</string>
+  <string name="day_theme">Tag Theme</string>
+  <string name="night_theme">Nacht Theme</string>
   <string name="default_font">Standardschrift</string>
   <string name="override_font">Anwendungsbereich der Standardschrift</string>
   <string name="language">Sprache</string>
@@ -133,7 +138,7 @@
   <string name="notification_minimum_cards_due_vibrate">Vibrieren</string>
   <string name="notification_minimum_cards_due_blink">Blinken</string>
   <string name="timeout_answer_text">Antwort automatisch zeigen</string>
-  <string name="timeout_answer_summ">Antworten automatisch ohne Benutzereingabe zeigen</string>
+  <string name="timeout_answer_summ">Show answer automatically without user input. Delay includes time for automatically played audio files.</string>
   <string name="timeout_answer_seconds">Zeit bis zum Zeigen der Antwort</string>
   <string name="timeout_answer_seconds_summ">XXX s</string>
   <string name="timeout_question_seconds">Zeit, bis die nächste Frage gezeigt wird</string>
@@ -148,6 +153,8 @@
   <string name="show_estimates_summ">Zeigt Zeiten bis zur nächsten Wiederholung auf den Antwortschaltflächen</string>
   <string name="show_progress">Fällige anzeigen</string>
   <string name="show_progress_summ">Verbleibende Anzahl der Karten anzeigen</string>
+  <string name="show_eta">ETA anzeigen</string>
+  <string name="show_eta_summ">Verbleibende Zeit anzeigen</string>
   <string name="use_current">Stapel für neue Karten</string>
   <string name="new_spread">Position neuer Karten</string>
   <string name="learn_cutoff">Grenzwert für vorzeitiges Lernen</string>
@@ -164,12 +171,12 @@
   <string name="convert_fen_text_summ">Schachbrett aus Forsyth–Edwards-Notation erstellen. Die Position muss in  [fen][/fen]-Tags eingefasst sein.</string>
   <string name="enable_api_title">AnkiDroid-API aktivieren</string>
   <string name="enable_api_summary">Verbindungen anderer Apps mit AnkiDroid zulassen und sie ohne weitere Eingriffe Daten lesen und schreiben lassen</string>
-  <string name="custom_buttons">App bar buttons</string>
-  <string name="custom_buttons_summary">Customize which actions appear in the app bar</string>
-  <string name="custom_buttons_setting_always_show">Always show</string>
-  <string name="custom_buttons_setting_if_room">Show if room</string>
-  <string name="custom_buttons_setting_menu_only">Menu only</string>
-  <string name="reset_custom_buttons">Reset to default</string>
+  <string name="custom_buttons">Leistenschaltflächen</string>
+  <string name="custom_buttons_summary">Anpassen von Aktionen in der App-Leiste</string>
+  <string name="custom_buttons_setting_always_show">Immer anzeigen</string>
+  <string name="custom_buttons_setting_if_room">Anzeigen wenn Freiraum</string>
+  <string name="custom_buttons_setting_menu_only">Nur im Menü</string>
+  <string name="reset_custom_buttons">Auf Standard zurücksetzen</string>
   <!-- Advanced statistics settings -->
   <string name="advanced_statistics_title">Erweiterte Statistik</string>
   <string name="enable_advanced_statistics_title">Erweiterte Statistik aktivieren</string>
@@ -196,6 +203,7 @@
   <string name="deck_conf_rev_cards">Wiederholungen</string>
   <string name="deck_conf_lps_cards">Fehlschläge</string>
   <string name="deck_conf_general">Allgemein</string>
+  <string name="deck_conf_reminders">Reminders</string>
   <string name="deck_conf_steps">Schritte (in Minuten)</string>
   <string name="deck_conf_order">Reihenfolge</string>
   <string name="deck_conf_new_cards_day">Neue Karten/Tag</string>
@@ -248,6 +256,8 @@
   <string name="deck_conf_cram_order">Karten ausgewählt nach</string>
   <string name="deck_conf_cram_reschedule">Neu planen</string>
   <string name="deck_conf_cram_reschedule_summ">Karten basierend auf meinen Antworten in diesem Stapel neu planen</string>
-  <string name="deck_conf_cram_steps">Benutzerdefinierte Schritte</string>
+  <string name="deck_conf_cram_steps">Custom steps (in minutes)</string>
   <string name="deck_conf_cram_steps_summ">Benutzerdefinierte Schritte definieren</string>
+  <string name="deck_conf_reminders_enabled">Enable reminder notifications for this deck</string>
+  <string name="deck_conf_reminders_time">Remind at</string>
 </resources>

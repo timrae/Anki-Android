@@ -80,7 +80,7 @@ public class Reviewer extends AbstractFlashcardViewer {
         Bundle extras = getIntent().getExtras();
         long did = extras.getLong("deckId", Long.MIN_VALUE);
 
-        if(did == Long.MIN_VALUE) {
+        if (did == Long.MIN_VALUE) {
             // deckId is not set, load default
             return;
         }
@@ -229,7 +229,7 @@ public class Reviewer extends AbstractFlashcardViewer {
 
             case R.id.action_enable_whiteboard:
                 // toggle whiteboard enabled state (and show/hide whiteboard item in action bar)
-                mPrefWhiteboard = ! mPrefWhiteboard;
+                mPrefWhiteboard = !mPrefWhiteboard;
                 Timber.i("Reviewer:: Whiteboard enabled state set to %b", mPrefWhiteboard);
                 setWhiteboardEnabledState(mPrefWhiteboard);
                 setWhiteboardVisibility(mPrefWhiteboard);
@@ -271,11 +271,10 @@ public class Reviewer extends AbstractFlashcardViewer {
 
 
     private void setCustomButtons(Menu menu) {
-        for(int itemId : mCustomButtons.keySet()) {
-            if(mCustomButtons.get(itemId) != MENU_DISABLED) {
+        for (int itemId : mCustomButtons.keySet()) {
+            if (mCustomButtons.get(itemId) != MENU_DISABLED) {
                 MenuItemCompat.setShowAsAction(menu.findItem(itemId), mCustomButtons.get(itemId));
-            }
-            else {
+            } else {
                 menu.findItem(itemId).setVisible(false);
             }
         }
@@ -313,9 +312,9 @@ public class Reviewer extends AbstractFlashcardViewer {
         if (mPrefWhiteboard) {
             // Configure the whiteboard related items in the action bar
             menu.findItem(R.id.action_enable_whiteboard).setTitle(R.string.disable_whiteboard);
-            if(mCustomButtons.get(R.id.action_hide_whiteboard) != MENU_DISABLED)
+            if (mCustomButtons.get(R.id.action_hide_whiteboard) != MENU_DISABLED)
                 menu.findItem(R.id.action_hide_whiteboard).setVisible(true);
-            if(mCustomButtons.get(R.id.action_clear_whiteboard) != MENU_DISABLED)
+            if (mCustomButtons.get(R.id.action_clear_whiteboard) != MENU_DISABLED)
                 menu.findItem(R.id.action_clear_whiteboard).setVisible(true);
 
             Drawable whiteboardIcon = ContextCompat.getDrawable(this, R.drawable.ic_gesture_white_24dp);
@@ -334,8 +333,8 @@ public class Reviewer extends AbstractFlashcardViewer {
         if (getCol().getDecks().isDyn(getParentDid())) {
             menu.findItem(R.id.action_open_deck_options).setVisible(false);
         }
-        if(mSpeakText){
-            if(mCustomButtons.get(R.id.action_select_tts) != MENU_DISABLED)
+        if (mSpeakText) {
+            if (mCustomButtons.get(R.id.action_select_tts) != MENU_DISABLED)
                 menu.findItem(R.id.action_select_tts).setVisible(true);
         }
         // Setup bury / suspend providers
@@ -363,56 +362,56 @@ public class Reviewer extends AbstractFlashcardViewer {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         char keyPressed = (char) event.getUnicodeChar();
         if (mAnswerField != null && !mAnswerField.isFocused()) {
-	        if (sDisplayAnswer) {
-	            if (keyPressed == '1') {
-	                answerCard(EASE_1);
-	                return true;
-	            }
-	            if (keyPressed == '2') {
-	                answerCard(EASE_2);
-	                return true;
-	            }
-	            if (keyPressed == '3') {
-	                answerCard(EASE_3);
-	                return true;
-	            }
-	            if (keyPressed == '4') {
-	                answerCard(EASE_4);
-	                return true;
-	            }
-	            if (keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
-	                answerCard(getDefaultEase());
-	                return true;
-	            }
-	        }
-	        if (keyPressed == 'e') {
-	            editCard();
-	            return true;
-	        }
-	        if (keyPressed == '*') {
+            if (sDisplayAnswer) {
+                if (keyPressed == '1') {
+                    answerCard(EASE_1);
+                    return true;
+                }
+                if (keyPressed == '2') {
+                    answerCard(EASE_2);
+                    return true;
+                }
+                if (keyPressed == '3') {
+                    answerCard(EASE_3);
+                    return true;
+                }
+                if (keyPressed == '4') {
+                    answerCard(EASE_4);
+                    return true;
+                }
+                if (keyCode == KeyEvent.KEYCODE_SPACE || keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER) {
+                    answerCard(getDefaultEase());
+                    return true;
+                }
+            }
+            if (keyPressed == 'e') {
+                editCard();
+                return true;
+            }
+            if (keyPressed == '*') {
                 onMark(mCurrentCard);
-	            return true;
-	        }
-	        if (keyPressed == '-') {
+                return true;
+            }
+            if (keyPressed == '-') {
                 dismiss(DismissType.BURY_CARD);
-	            return true;
-	        }
-	        if (keyPressed == '=') {
+                return true;
+            }
+            if (keyPressed == '=') {
                 dismiss(DismissType.BURY_NOTE);
-	            return true;
-	        }
-	        if (keyPressed == '@') {
+                return true;
+            }
+            if (keyPressed == '@') {
                 dismiss(DismissType.SUSPEND_CARD);
-	            return true;
-	        }
-	        if (keyPressed == '!') {
+                return true;
+            }
+            if (keyPressed == '!') {
                 dismiss(DismissType.SUSPEND_NOTE);
-	            return true;
-	        }
-	        if (keyPressed == 'r' || keyCode == KeyEvent.KEYCODE_F5) {
-	            playSounds(true);
-	            return true;
-	        }
+                return true;
+            }
+            if (keyPressed == 'r' || keyCode == KeyEvent.KEYCODE_F5) {
+                playSounds(true);
+                return true;
+            }
 
             // different from Anki Desktop
             if (keyPressed == 'z') {
@@ -581,6 +580,7 @@ public class Reviewer extends AbstractFlashcardViewer {
 
     /**
      * Whether or not dismiss note is available for current card and specified DismissType
+     *
      * @param type Currently only SUSPEND_NOTE and BURY_NOTE supported
      * @return true if there is another card of same note that could be dismissed
      */
@@ -589,10 +589,10 @@ public class Reviewer extends AbstractFlashcardViewer {
             return false;
         }
         List<Card> cards = mCurrentCard.note().cards();
-        for(Card card : cards) {
+        for (Card card : cards) {
             if (card.getId() == mCurrentCard.getId()) continue;
             int queue = card.getQueue();
-            if(type == DismissType.SUSPEND_NOTE && queue != Card.QUEUE_SUSP) {
+            if (type == DismissType.SUSPEND_NOTE && queue != Card.QUEUE_SUSP) {
                 return true;
             } else if (type == DismissType.BURY_NOTE &&
                     queue != Card.QUEUE_SUSP && queue != Card.QUEUE_USER_BRD && queue != Card.QUEUE_SCHED_BRD) {

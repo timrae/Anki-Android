@@ -53,6 +53,7 @@ import org.json.JSONException;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.List;
+import java.lang.Math;
 
 import timber.log.Timber;
 
@@ -362,6 +363,22 @@ public class Reviewer extends AbstractFlashcardViewer {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         char keyPressed = (char) event.getUnicodeChar();
         if (mAnswerField != null && !mAnswerField.isFocused()) {
+            if (keyCode == KeyEvent.KEYCODE_BUTTON_Y) {
+                answerCard(Math.min(getCol().getSched().answerButtons(mCurrentCard), EASE_1));
+                return true;
+            }
+            if (keyCode == KeyEvent.KEYCODE_BUTTON_X) {
+                answerCard(Math.min(getCol().getSched().answerButtons(mCurrentCard), EASE_2));
+                return true;
+            }
+            if (keyCode == KeyEvent.KEYCODE_BUTTON_B) {
+                answerCard(Math.min(getCol().getSched().answerButtons(mCurrentCard), EASE_3));
+                return true;
+            }
+            if (keyCode == KeyEvent.KEYCODE_BUTTON_A) {
+                answerCard(Math.min(getCol().getSched().answerButtons(mCurrentCard), EASE_4));
+                return true;
+            }
             if (sDisplayAnswer) {
                 if (keyPressed == '1') {
                     answerCard(EASE_1);

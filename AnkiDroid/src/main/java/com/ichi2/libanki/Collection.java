@@ -871,6 +871,10 @@ public class Collection {
 
     private Card _newCard(Note note, JSONObject template, int due, int parameterDid, boolean flush) {
         Card card = new Card(this);
+        return _newCard(card, note, template, due, parameterDid, flush);
+    }
+
+    private Card _newCard(Card card, Note note, JSONObject template, int due, int parameterDid, boolean flush) {
         long nid = note.getId();
         int ord = -1;
         long did;
@@ -879,7 +883,7 @@ public class Collection {
             ord = template.getInt("ord");
             card.setOrd(ord);
         } catch (JSONException e) {
-            new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         did = mDb.queryScalar("select did from cards where nid = " + nid + " and ord = " + ord);
         // Use template did (deck override) if valid, otherwise did in argument, otherwise model did

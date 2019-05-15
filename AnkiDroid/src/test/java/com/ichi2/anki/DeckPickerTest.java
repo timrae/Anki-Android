@@ -16,7 +16,6 @@ import static org.junit.Assert.assertNull;
 
 @RunWith(AndroidJUnit4.class)
 public class DeckPickerTest extends RobolectricTest {
-
     @Test
     public void verifyCodeMessages() {
 

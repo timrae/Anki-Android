@@ -17,6 +17,8 @@
 package com.ichi2.anki;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 
 import com.ichi2.libanki.Card;
@@ -35,19 +37,23 @@ import timber.log.Timber;
  * to begin showing them. Special rules are applied if the list size is 1 (i.e., no scrolling
  * buttons will be shown).
  */
-public class CardTemplatePreviewer extends Previewer {
+public class CardTemplatePreviewer extends AbstractFlashcardViewer {
     private String mEditedModelFileName = null;
     private JSONObject mEditedModel = null;
+    private int mIndex;
+    private long[] mCardList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Timber.d("onCreate()");
+        super.onCreate(savedInstanceState);
 
         Bundle parameters = savedInstanceState;
         if (parameters == null) {
             parameters = getIntent().getExtras();
         }
         mEditedModelFileName = parameters.getString(CardTemplateEditor.INTENT_MODEL_FILENAME);
+        mCardList = parameters.getLongArray("cardList");
         mIndex = parameters.getInt("index");
 
         if (mEditedModelFileName != null) {
@@ -65,32 +71,67 @@ public class CardTemplatePreviewer extends Previewer {
             }
         }
 
+        showBackIcon();
+        // Ensure navigation drawer can't be opened. Various actions in the drawer cause crashes.
+        disableDrawerSwipe();
+        startLoadingCollection();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();;
         if (mCurrentCard == null || mIndex < 0) {
             Timber.e("CardTemplatePreviewer started with empty card list or invalid index");
             finishWithoutAnimation();
-            return;
         }
-
-        super.onCreate(savedInstanceState);
     }
 
+    @Override
+    protected void setTitle() {
+        getSupportActionBar().setTitle(R.string.preview_title);
+    }
+
+    @Override
+    protected void initLayout() {
+        super.initLayout();
+        mTopBarLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void displayCardQuestion() {
+        super.displayCardQuestion();
+        mFlipCardLayout.setVisibility(View.VISIBLE);
+    }
+
+
+    // Called via mFlipCardListener in parent class when answer button pressed
+    @Override
+    protected void displayCardAnswer() {
+        super.displayCardAnswer();
+        findViewById(R.id.answer_options_layout).setVisibility(View.GONE);
+        mFlipCardLayout.setVisibility(View.GONE);
+        hideEaseButtons();
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(CardTemplateEditor.INTENT_MODEL_FILENAME, mEditedModelFileName);
+        outState.putLongArray("cardList", mCardList);
+        outState.putInt("index", mIndex);
         super.onSaveInstanceState(outState);
     }
 
 
     @Override
     protected void onCollectionLoaded(Collection col) {
+        super.onCollectionLoaded(col);
         if (mCurrentCard == null) {
             mCurrentCard = new PreviewerCard(col, mCardList[mIndex]);
         }
-        super.onCollectionLoaded(col);
+        displayCardQuestion();
+        showBackIcon();;
     }
 
-    @Override
     protected Card getCard(Collection col, long cardListIndex) {
         return new PreviewerCard(col, cardListIndex);
     }

@@ -112,6 +112,6 @@ public class PreviewerTest extends RobolectricTest {
             n.setField(i, fieldNames.get(i));
         }
         n.flush();
-        return getCol()._newCard(new Card(getCol()), n, (JSONObject)model.getJSONArray("tmpls").get(ordinal), 1, true);
+        return getCol().getNewLinkedCard(new Card(getCol()), n, (JSONObject)model.getJSONArray("tmpls").get(ordinal), 1, true);
     }
 }

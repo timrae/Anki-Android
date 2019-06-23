@@ -100,9 +100,6 @@ public class CardTemplateEditor extends AnkiActivity {
         if (savedInstanceState == null) {
             // get model id
             mModelId = getIntent().getLongExtra("modelId", -1L);
-            mEditedModel = null;
-            mEditedModelFileName = null;
-            mTemplateChanges = null;
             if (mModelId == -1) {
                 Timber.e("CardTemplateEditor :: no model ID was provided");
                 finishWithoutAnimation();
@@ -750,9 +747,6 @@ public class CardTemplateEditor extends AnkiActivity {
      */
     public void addTemplateChange(ChangeType type, int ordinal) {
         Timber.d("addTemplateChange() type %s for ordinal %s", type, ordinal);
-        if (mTemplateChanges == null) {
-            mTemplateChanges = new ArrayList<>();
-        }
         Object[] change = new Object[] {ordinal, type};
 
         // If we are deleting something we added but have not saved, edit it out of the change list
@@ -789,9 +783,6 @@ public class CardTemplateEditor extends AnkiActivity {
 
 
     public @NonNull ArrayList<Object[]> getTemplateChanges() {
-        if (mTemplateChanges == null) {
-            mTemplateChanges = new ArrayList<>();
-        }
         return mTemplateChanges;
     }
 

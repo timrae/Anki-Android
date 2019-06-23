@@ -185,6 +185,9 @@ public class CardTemplateEditor extends AnkiActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mTemplateAdapter = getNewTemplatePagerAdapter(getSupportFragmentManager());
+
+        // The first time the activity loads it has a model id but no edits yet, so no edited model
+        // take the passed model id load it up for editing
         if (mEditedModel == null) {
             try {
                 mEditedModel = new JSONObject(col.getModels().get(mModelId).toString());
@@ -244,6 +247,7 @@ public class CardTemplateEditor extends AnkiActivity {
                 .negativeText(R.string.dialog_cancel)
                 .onPositive((dialog, which) -> {
                     Timber.i("TemplateEditor:: OK button pressed to confirm discard changes");
+                    // Clear the edited model from any cache files, and clear it from this objects memory to discard changes
                     clearTempModelFiles(this);
                     mEditedModelFileName = null;
                     mEditedModel = null;
@@ -279,7 +283,8 @@ public class CardTemplateEditor extends AnkiActivity {
     // INNER CLASSES
     // ----------------------------------------------------------------------------
 
-
+    // Testing Android apps is hard, and pager adapters in fragments is nearly impossible.
+    // In order to make this object testable we have to allow for some plumbing pass through
     protected TemplatePagerAdapter getNewTemplatePagerAdapter(FragmentManager fm) {
         return new TemplatePagerAdapter(fm);
     }
@@ -351,7 +356,7 @@ public class CardTemplateEditor extends AnkiActivity {
         private EditText mFront;
         private EditText mCss;
         private EditText mBack;
-        private CardTemplateEditor templateEditor;
+        private CardTemplateEditor mTemplateEditor;
 
         public static CardTemplateFragment newInstance(int position, long noteId) {
             CardTemplateFragment f = new CardTemplateFragment();
@@ -364,13 +369,13 @@ public class CardTemplateEditor extends AnkiActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            // Storing a reference to the templateEditor allows us to use member variables
-            templateEditor = (CardTemplateEditor)getActivity();
+            // Storing a reference to the mTemplateEditor allows us to use member variables
+            mTemplateEditor = (CardTemplateEditor)getActivity();
             View mainView = inflater.inflate(R.layout.card_template_editor_item, container, false);
             final int position = getArguments().getInt("position");
             try {
                 // Load template
-                final JSONArray tmpls = templateEditor.mEditedModel.getJSONArray("tmpls");
+                final JSONArray tmpls = mTemplateEditor.mEditedModel.getJSONArray("tmpls");
                 final JSONObject template = tmpls.getJSONObject(position);
                 // Load EditText Views
                 mFront = ((EditText) mainView.findViewById(R.id.front_edit));
@@ -378,7 +383,7 @@ public class CardTemplateEditor extends AnkiActivity {
                 mBack = ((EditText) mainView.findViewById(R.id.back_edit));
                 // Set EditText content
                 mFront.setText(template.getString("qfmt"));
-                mCss.setText(templateEditor.mEditedModel.getString("css"));
+                mCss.setText(mTemplateEditor.mEditedModel.getString("css"));
                 mBack.setText(template.getString("afmt"));
                 // Set text change listeners
                 TextWatcher templateEditorWatcher = new TextWatcher() {
@@ -387,9 +392,9 @@ public class CardTemplateEditor extends AnkiActivity {
                         try {
                             template.put("qfmt", mFront.getText());
                             template.put("afmt", mBack.getText());
-                            templateEditor.mEditedModel.put("css", mCss.getText());
+                            mTemplateEditor.mEditedModel.put("css", mCss.getText());
                             tmpls.put(position, template);
-                            templateEditor.mEditedModel.put("tmpls", tmpls);
+                            mTemplateEditor.mEditedModel.put("tmpls", tmpls);
                         } catch (JSONException e) {
                             Timber.e(e, "Could not update card template");
                         }
@@ -414,7 +419,7 @@ public class CardTemplateEditor extends AnkiActivity {
         public void onDestroyView() {
             super.onDestroyView();
             // Clear our activity reference so we don't memory leak
-            templateEditor = null;
+            mTemplateEditor = null;
         }
 
         @Override
@@ -423,9 +428,9 @@ public class CardTemplateEditor extends AnkiActivity {
         }
 
         private void updateCss() {
-            if (mCss != null && templateEditor.mEditedModel != null) {
+            if (mCss != null && mTemplateEditor.mEditedModel != null) {
                 try {
-                    mCss.setText(templateEditor.mEditedModel.getString("css"));
+                    mCss.setText(mTemplateEditor.mEditedModel.getString("css"));
                 } catch (JSONException e) {
                     // do nothing
                 }
@@ -441,37 +446,37 @@ public class CardTemplateEditor extends AnkiActivity {
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
-            final Collection col = templateEditor.getCol();
+            final Collection col = mTemplateEditor.getCol();
             switch (item.getItemId()) {
                 case R.id.action_add:
                     Timber.i("CardTemplateEditor:: Add template button pressed");
                     // TODO in Anki Desktop, they have a popup first with "This will create %d cards. Proceed?"
                     //      AnkiDroid never had this so it isn't a regression but it is a miss for AnkiDesktop parity
-                    addNewTemplateWithCheck(templateEditor.mEditedModel);
+                    addNewTemplateWithCheck(mTemplateEditor.mEditedModel);
                     return true;
                 case R.id.action_delete: {
                     Timber.i("CardTemplateEditor:: Delete template button pressed");
                     Resources res = getResources();
                     int position = getArguments().getInt("position");
                     try {
-                        JSONArray tmpls = templateEditor.mEditedModel.getJSONArray("tmpls");
+                        JSONArray tmpls = mTemplateEditor.mEditedModel.getJSONArray("tmpls");
                         final JSONObject template = tmpls.getJSONObject(position);
                         // Don't do anything if only one template
                         if (tmpls.length() < 2) {
-                            UIUtils.showThemedToast(templateEditor, res.getString(R.string.card_template_editor_cant_delete), false);
+                            UIUtils.showThemedToast(mTemplateEditor, res.getString(R.string.card_template_editor_cant_delete), false);
                             return true;
                         }
 
                         // Make sure we won't leave orphaned notes if we do delete the template
-                        if (Models.isRemTemplateSafe(col, templateEditor.mEditedModel, position) == null) {
+                        if (Models.isRemTemplateSafe(col, mTemplateEditor.mEditedModel, position) == null) {
                             String message = getResources().getString(R.string.card_template_editor_would_delete_note);
-                            UIUtils.showThemedToast(templateEditor, message, false);
+                            UIUtils.showThemedToast(mTemplateEditor, message, false);
                             return true;
                         }
 
                         // Show confirmation dialog
-                        int numAffectedCards = col.getModels().tmplUseCount(templateEditor.mEditedModel, position);
-                        confirmDeleteCards(template, templateEditor.mEditedModel, numAffectedCards);
+                        int numAffectedCards = col.getModels().tmplUseCount(mTemplateEditor.mEditedModel, position);
+                        confirmDeleteCards(template, mTemplateEditor.mEditedModel, numAffectedCards);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -480,7 +485,7 @@ public class CardTemplateEditor extends AnkiActivity {
                 case R.id.action_preview: {
                     Timber.i("CardTemplateEditor:: Preview model button pressed");
                     // Create intent for the card template previewer and add some arguments
-                    Intent i = new Intent(templateEditor, CardTemplatePreviewer.class);
+                    Intent i = new Intent(mTemplateEditor, CardTemplatePreviewer.class);
                     int pos = getArguments().getInt("position");
                     if (getArguments().getLong("noteId") != -1L && pos <
                             col.getNote(getArguments().getLong("noteId")).cards().size()) {
@@ -493,8 +498,8 @@ public class CardTemplateEditor extends AnkiActivity {
                     }
                     // Save the model and pass the filename if updated
                     if (modelHasChanged()) {
-                        templateEditor.mEditedModelFileName = CardTemplateEditor.saveTempModel(templateEditor, templateEditor.mEditedModel);
-                        i.putExtra(INTENT_MODEL_FILENAME, templateEditor.mEditedModelFileName);
+                        mTemplateEditor.mEditedModelFileName = CardTemplateEditor.saveTempModel(mTemplateEditor, mTemplateEditor.mEditedModel);
+                        i.putExtra(INTENT_MODEL_FILENAME, mTemplateEditor.mEditedModelFileName);
                     }
                     startActivityForResult(i, REQUEST_PREVIEWER);
                     return true;
@@ -502,11 +507,11 @@ public class CardTemplateEditor extends AnkiActivity {
                 case R.id.action_confirm:
                     Timber.i("CardTemplateEditor:: Save model button pressed");
                     if (modelHasChanged()) {
-                        clearTempModelFiles(templateEditor);
-                        DeckTask.TaskData args = new DeckTask.TaskData(new Object[] {templateEditor.mEditedModel, templateEditor.getTemplateChanges()});
+                        clearTempModelFiles(mTemplateEditor);
+                        DeckTask.TaskData args = new DeckTask.TaskData(new Object[] {mTemplateEditor.mEditedModel, mTemplateEditor.getTemplateChanges()});
                         DeckTask.launchDeckTask(DeckTask.TASK_TYPE_SAVE_MODEL, mSaveModelAndExitHandler, args);
                     } else {
-                        templateEditor.finishWithAnimation(ActivityTransitionAnimation.RIGHT);
+                        mTemplateEditor.finishWithAnimation(ActivityTransitionAnimation.RIGHT);
                     }
 
                     return true;
@@ -519,34 +524,34 @@ public class CardTemplateEditor extends AnkiActivity {
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
-            clearTempModelFiles(templateEditor);
+            clearTempModelFiles(mTemplateEditor);
         }
 
         /* Used for updating the collection when a model has been edited */
         private DeckTask.TaskListener mSaveModelAndExitHandler = new DeckTask.TaskListener() {
             @Override
             public void onPreExecute() {
-                templateEditor.showProgressBar();
-                final InputMethodManager imm = (InputMethodManager) templateEditor.getSystemService(Context.INPUT_METHOD_SERVICE);
+                mTemplateEditor.showProgressBar();
+                final InputMethodManager imm = (InputMethodManager) mTemplateEditor.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
             @Override
             public void onPostExecute(DeckTask.TaskData result) {
-                templateEditor.mEditedModel = null;
-                templateEditor.mEditedModelFileName = null;
-                templateEditor.mTemplateChanges = null;
+                mTemplateEditor.mEditedModel = null;
+                mTemplateEditor.mEditedModelFileName = null;
+                mTemplateEditor.mTemplateChanges = null;
                 if (result.getBoolean()) {
-                    templateEditor.finishWithAnimation(ActivityTransitionAnimation.RIGHT);
+                    mTemplateEditor.finishWithAnimation(ActivityTransitionAnimation.RIGHT);
                 } else {
                     // RuntimeException occurred
-                    templateEditor.finishWithoutAnimation();
+                    mTemplateEditor.finishWithoutAnimation();
                 }
             }
         };
 
         private boolean modelHasChanged() {
-            return templateEditor.modelHasChanged();
+            return mTemplateEditor.modelHasChanged();
         }
 
 
@@ -570,7 +575,7 @@ public class CardTemplateEditor extends AnkiActivity {
                 }
             };
             d.setConfirm(confirm);
-            templateEditor.showDialogFragment(d);
+            mTemplateEditor.showDialogFragment(d);
         }
 
         /**
@@ -581,26 +586,16 @@ public class CardTemplateEditor extends AnkiActivity {
          */
         private void deleteTemplateWithCheck(final JSONObject tmpl, final JSONObject model) {
             try {
-                templateEditor.getCol().modSchema(true);
+                mTemplateEditor.getCol().modSchema(true);
                 deleteTemplate(tmpl, model);
             } catch (ConfirmModSchemaException e) {
                 ConfirmationDialog d = new ConfirmationDialog();
                 d.setArgs(getResources().getString(R.string.full_sync_confirmation));
-                Runnable confirm = new Runnable() {
-                    @Override
-                    public void run() {
-                        deleteTemplate(tmpl, model);
-                    }
-                };
-                Runnable cancel = new Runnable() {
-                    @Override
-                    public void run() {
-                        templateEditor.dismissAllDialogFragments();
-                    }
-                };
+                Runnable confirm = () -> deleteTemplate(tmpl, model);
+                Runnable cancel = () -> mTemplateEditor.dismissAllDialogFragments();
                 d.setConfirm(confirm);
                 d.setCancel(cancel);
-                templateEditor.showDialogFragment(d);
+                mTemplateEditor.showDialogFragment(d);
             }
         }
 
@@ -619,17 +614,17 @@ public class CardTemplateEditor extends AnkiActivity {
                         newTemplates.put(possibleMatch);
                     } else {
                         Timber.d("deleteTemplate() found match - removing template with ord %s", possibleMatch.getInt("ord"));
-                        templateEditor.addTemplateChange(ChangeType.DELETE, possibleMatch.getInt("ord"));
+                        mTemplateEditor.addTemplateChange(ChangeType.DELETE, possibleMatch.getInt("ord"));
                     }
                 }
                 model.put("tmpls", newTemplates);
                 Models._updateTemplOrds(model);
-                templateEditor.selectTemplate(model.length());
+                mTemplateEditor.selectTemplate(model.length());
             } catch (JSONException e) {
                 throw new RuntimeException("Unable to delete template from model", e);
             }
 
-            templateEditor.dismissAllDialogFragments();
+            mTemplateEditor.dismissAllDialogFragments();
         }
 
         /**
@@ -639,7 +634,7 @@ public class CardTemplateEditor extends AnkiActivity {
          */
         private void addNewTemplateWithCheck(final JSONObject model) {
             try {
-                templateEditor.getCol().modSchema(true);
+                mTemplateEditor.getCol().modSchema(true);
                 Timber.d("addNewTemplateWithCheck() called and no CMSE?");
                 addNewTemplate(model);
             } catch (ConfirmModSchemaException e) {
@@ -652,7 +647,7 @@ public class CardTemplateEditor extends AnkiActivity {
                     }
                 };
                 d.setConfirm(confirm);
-                templateEditor.showDialogFragment(d);
+                mTemplateEditor.showDialogFragment(d);
             }
         }
 
@@ -681,9 +676,9 @@ public class CardTemplateEditor extends AnkiActivity {
                 Timber.d("addNewTemplate() lastExistingOrd was %s", lastExistingOrd);
                 newTemplate.put("ord", lastExistingOrd + 1);
                 templates.put(newTemplate);
-                templateEditor.addTemplateChange(ChangeType.ADD, newTemplate.getInt("ord"));
-                templateEditor.mEditedModel.put("tmpls", templates);
-                templateEditor.selectTemplate(model.length());
+                mTemplateEditor.addTemplateChange(ChangeType.ADD, newTemplate.getInt("ord"));
+                mTemplateEditor.mEditedModel.put("tmpls", templates);
+                mTemplateEditor.selectTemplate(model.length());
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }

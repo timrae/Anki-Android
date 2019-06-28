@@ -854,7 +854,7 @@ public class Models {
             }
 
             // the code in "isRemTemplateSafe" was in place here in libanki. It is extracted to a method for reuse
-            long[] cids = isRemTemplateSafe(mCol, m, ord);
+            long[] cids = getCardIdsForModel(m.getLong("id"), ord);
             if (cids == null) {
                 return false;
             }
@@ -885,18 +885,29 @@ public class Models {
 
 
     /**
+     * Easily test if removing a template is safe without actually removing it
+     * Verifies all notes with this template have at least two cards, to guard against creating orphaned notes
+     * @return false if not safe, true if it is safe
+     */
+    public boolean isRemTemplateSafe(long modelId, int ord) {
+        long[] cardIds = getCardIdsForModel(modelId, ord);
+        return cardIds != null;
+    }
+
+
+    /**
      * Extracted from remTemplate so we can test if removing a template is safe without actually removing it
      * Verifies all notes with this template have at least two cards, to guard against creating orphaned notes
      * @return null if not safe, long[] of card ids to delete if it is safe
      */
-    public static @Nullable long[] isRemTemplateSafe(Collection col, JSONObject m, int ord) throws JSONException {
+    private @Nullable long[] getCardIdsForModel(long modelId, int ord) {
         String sql = "select c.id from cards c, notes f where c.nid=f.id and mid = " +
-                m.getLong("id") + " and ord = " + ord;
-        long[] cids = Utils.toPrimitive(col.getDb().queryColumn(Long.class, sql, 0));
+                modelId + " and ord = " + ord;
+        long[] cids = Utils.toPrimitive(mCol.getDb().queryColumn(Long.class, sql, 0));
         // all notes with this template must have at least two cards, or we could end up creating orphaned notes
         sql = "select nid, count() from cards where nid in (select nid from cards where id in " +
                 Utils.ids2str(cids) + ") group by nid having count() < 2 limit 1";
-        if (col.getDb().queryScalar(sql) != 0) {
+        if (mCol.getDb().queryScalar(sql) != 0) {
             return null;
         }
         return cids;

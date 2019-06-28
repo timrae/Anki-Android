@@ -79,7 +79,7 @@ public class CardTemplatePreviewer extends AbstractFlashcardViewer {
 
     @Override
     protected void onResume() {
-        super.onResume();;
+        super.onResume();
         if (mCurrentCard == null || mIndex < 0) {
             Timber.e("CardTemplatePreviewer started with empty card list or invalid index");
             finishWithoutAnimation();
@@ -129,7 +129,7 @@ public class CardTemplatePreviewer extends AbstractFlashcardViewer {
             mCurrentCard = new PreviewerCard(col, mCardList[mIndex]);
         }
         displayCardQuestion();
-        showBackIcon();;
+        showBackIcon();
     }
 
     protected Card getCard(Collection col, long cardListIndex) {

@@ -468,7 +468,7 @@ public class CardTemplateEditor extends AnkiActivity {
                         }
 
                         // Make sure we won't leave orphaned notes if we do delete the template
-                        if (Models.isRemTemplateSafe(col, mTemplateEditor.mEditedModel, position) == null) {
+                        if (!col.getModels().isRemTemplateSafe(mTemplateEditor.mEditedModel.getLong("id"), position)) {
                             String message = getResources().getString(R.string.card_template_editor_would_delete_note);
                             UIUtils.showThemedToast(mTemplateEditor, message, false);
                             return true;

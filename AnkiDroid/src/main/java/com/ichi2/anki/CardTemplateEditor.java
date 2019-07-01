@@ -468,6 +468,10 @@ public class CardTemplateEditor extends AnkiActivity {
                         }
 
                         // Make sure we won't leave orphaned notes if we do delete the template
+                        // FIXME this case is currently un-tested and likely not correct with ephemeral model deletes
+                        // general idea for alteration is to have isRemTemplateSafe take an array of ids, and for each delete,
+                        // check the list of all ids at once to make sure this next delete isnt' the one that does it in combo w/previous
+                        // unsaved deletes
                         if (!col.getModels().isRemTemplateSafe(mTemplateEditor.mEditedModel.getLong("id"), position)) {
                             String message = getResources().getString(R.string.card_template_editor_would_delete_note);
                             UIUtils.showThemedToast(mTemplateEditor, message, false);
@@ -624,7 +628,9 @@ public class CardTemplateEditor extends AnkiActivity {
                 throw new RuntimeException("Unable to delete template from model", e);
             }
 
-            mTemplateEditor.dismissAllDialogFragments();
+            if (getActivity() != null) {
+                ((CardTemplateEditor) getActivity()).dismissAllDialogFragments();
+            }
         }
 
         /**

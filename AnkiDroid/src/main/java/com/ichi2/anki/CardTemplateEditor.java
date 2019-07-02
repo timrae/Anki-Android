@@ -62,6 +62,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -191,6 +192,7 @@ public class CardTemplateEditor extends AnkiActivity {
         if (mEditedModel == null) {
             try {
                 mEditedModel = new JSONObject(col.getModels().get(mModelId).toString());
+                Timber.d("onCollectionLoaded() model is %s", mEditedModel.toString(2));
             } catch (JSONException e) {
                 Timber.e(e, "Impossible error copying one JSONObject to another one");
                 finishWithoutAnimation();
@@ -467,15 +469,17 @@ public class CardTemplateEditor extends AnkiActivity {
                             return true;
                         }
 
-                        // Make sure we won't leave orphaned notes if we do delete the template
-                        // FIXME this case is currently un-tested and likely not correct with ephemeral model deletes
-                        // general idea for alteration is to have isRemTemplateSafe take an array of ids, and for each delete,
-                        // check the list of all ids at once to make sure this next delete isnt' the one that does it in combo w/previous
-                        // unsaved deletes
-                        if (!col.getModels().isRemTemplateSafe(mTemplateEditor.mEditedModel.getLong("id"), position)) {
-                            String message = getResources().getString(R.string.card_template_editor_would_delete_note);
-                            UIUtils.showThemedToast(mTemplateEditor, message, false);
-                            return true;
+                        // For existing templates, ake sure we won't leave orphaned notes if we do delete the template
+                        // Note that because the database is unaware of previous (but unsaved deletes), so for every
+                        // template delete we check the database for the combination of all pending deletes, to see if
+                        // this delete in addition to previous possibly orphans cards
+                        if (!mTemplateEditor.isTemplatePendingAdd(position)) {
+                            int[] currentDeletes = mTemplateEditor.getDeleteDbOrds(position);
+                            if (!col.getModels().isRemTemplatesSafe(mTemplateEditor.mEditedModel.getLong("id"), currentDeletes)) {
+                                String message = getResources().getString(R.string.card_template_editor_would_delete_note);
+                                UIUtils.showThemedToast(mTemplateEditor, message, false);
+                                return true;
+                            }
                         }
 
                         // Show confirmation dialog
@@ -741,6 +745,8 @@ public class CardTemplateEditor extends AnkiActivity {
         }
     }
 
+    // ---- All of the below code will be extracted to a coherent data structure of it's own
+    //      supporting the general API below and encapsulating the temporary model
 
     /**
      * Template deletes shift card ordinals in the database. To operate without saving, we must keep track to apply in order.
@@ -780,6 +786,96 @@ public class CardTemplateEditor extends AnkiActivity {
 
         Timber.d("addTemplateChange() added ord/type: %s/%s", change[0], change[1]);
         mTemplateChanges.add(change);
+    }
+
+
+    /**
+     * Check if the given ordinal is an addition from this editing session (and thus is not in the database)
+     * @param ord the ordinal to check
+     * @return boolean true if the given ordinal was added this session (and is not in the database yet)
+     */
+    public boolean isTemplatePendingAdd(int ord) {
+        int ordinalAdjustment = 0;
+        for (int i = mTemplateChanges.size() - 1; i >= 0; i--) {
+            Object[] oldChange = mTemplateChanges.get(i);
+            switch ((ChangeType) oldChange[1]) {
+                case DELETE: {
+                    // Deleting an ordinal at or below us? Adjust our comparison basis...
+                    if ((Integer) oldChange[0] - ordinalAdjustment <= ord) {
+                        ordinalAdjustment++;
+                        continue;
+                    }
+                    break;
+                }
+                case ADD:
+                    if (ord == (Integer) oldChange[0] - ordinalAdjustment) {
+                        // something we added this session?
+                        return true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Return an int[] containing the collection-relative ordinals of all the currently pending deletes,
+     * including the ordinal passed in, as opposed to the changelist-relative ordinals
+     *
+     * @return int[] of all ordinals currently in the database, pending delete
+     */
+    public int[] getDeleteDbOrds(int ord) {
+        dumpChanges();
+        Timber.d("getDeleteDbOrds()");
+
+        // array containing the original / db-relative ordinals for all pending deletes plus the proposed one
+        int[] deletedDbOrds = new int[0];
+
+        // For each entry in the changes list - and the proposed delete - scan for deletes to get original ordinal
+        for (int i = 0; i <= mTemplateChanges.size(); i++) {
+            int ordinalAdjustment = 0;
+
+            // We need an initializer. Though proposed change is checked last, it's a reasonable default initializer.
+            Object[] currentChange = { ord, ChangeType.DELETE };
+            if (i < mTemplateChanges.size()) {
+                // Until we exhaust the pending change list we will use them
+                currentChange = mTemplateChanges.get(i);
+            }
+
+            // If the current pending change isn't a delete, it is unimportant here
+            if (currentChange[1] != ChangeType.DELETE) {
+                continue;
+            }
+
+            // If it is a delete, scan previous deletes and shift as necessary for original ord
+            for (int j = 0; j < i; j++) {
+                Object[] previousChange = mTemplateChanges.get(j);
+
+                // Is previous change a delete? Lower ordinal than current change?
+                if ((previousChange[1] == ChangeType.DELETE) && ((int)previousChange[0] <= (int)currentChange[0])) {
+                    // If so, that is the case where things shift. It means our ordinals moved and original ord is higher
+                    ordinalAdjustment++;
+                }
+            }
+
+            // We know how many times ordinals smaller than the current were deleted so we have the total adjustment
+            // Save this pending delete into an expanded array at it's original / db-relative position
+            deletedDbOrds = Arrays.copyOf(deletedDbOrds, deletedDbOrds.length + 1);
+            deletedDbOrds[deletedDbOrds.length-1] = (int)currentChange[0] + ordinalAdjustment;
+        }
+
+        return deletedDbOrds;
+    }
+
+
+    public void dumpChanges() {
+        for (int i = 0; i < mTemplateChanges.size(); i++) {
+            Object[] change = mTemplateChanges.get(i);
+            Timber.d("dumpChanges() Change %s is type/ord %s/%s", i, change[0], change[1]);
+        }
     }
 
 

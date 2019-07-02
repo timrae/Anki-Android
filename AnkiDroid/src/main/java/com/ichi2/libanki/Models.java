@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Pair;
 import androidx.annotation.Nullable;
+import timber.log.Timber;
 
 import com.ichi2.anki.exception.ConfirmModSchemaException;
 import com.ichi2.utils.Assert;
@@ -854,7 +855,7 @@ public class Models {
             }
 
             // the code in "isRemTemplateSafe" was in place here in libanki. It is extracted to a method for reuse
-            long[] cids = getCardIdsForModel(m.getLong("id"), ord);
+            long[] cids = getCardIdsForModel(m.getLong("id"), new int[]{ord});
             if (cids == null) {
                 return false;
             }
@@ -885,24 +886,32 @@ public class Models {
 
 
     /**
-     * Easily test if removing a template is safe without actually removing it
-     * Verifies all notes with this template have at least two cards, to guard against creating orphaned notes
+     * Easily test if removing one or more templates is safe without actually removing them
+     * Verifies all notes with these templates have at least two cards, to guard against creating orphaned notes
      * @return false if not safe, true if it is safe
      */
-    public boolean isRemTemplateSafe(long modelId, int ord) {
-        long[] cardIds = getCardIdsForModel(modelId, ord);
+    public boolean isRemTemplatesSafe(long modelId, int[] ords) {
+        long[] cardIds = getCardIdsForModel(modelId, ords);
         return cardIds != null;
     }
 
 
     /**
-     * Extracted from remTemplate so we can test if removing a template is safe without actually removing it
-     * Verifies all notes with this template have at least two cards, to guard against creating orphaned notes
+     * Extracted from remTemplate so we can test if removing templates is safe without actually removing them
+     * Verifies all notes with these templates have at least two cards, to guard against creating orphaned notes
      * @return null if not safe, long[] of card ids to delete if it is safe
      */
-    private @Nullable long[] getCardIdsForModel(long modelId, int ord) {
+    private @Nullable long[] getCardIdsForModel(long modelId, int[] ords) {
+        String ordString = "";
+        for (int i = 0; i < ords.length; i++) {
+            if (i > 0) {
+                ordString += ", ";
+            }
+            ordString += ords[i];
+        }
         String sql = "select c.id from cards c, notes f where c.nid=f.id and mid = " +
-                modelId + " and ord = " + ord;
+                modelId + " and ord in (" + ordString + ")";
+        Timber.d("getCardIdsForModel sql = %s", sql);
         long[] cids = Utils.toPrimitive(mCol.getDb().queryColumn(Long.class, sql, 0));
         // all notes with this template must have at least two cards, or we could end up creating orphaned notes
         sql = "select nid, count() from cards where nid in (select nid from cards where id in " +

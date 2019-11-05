@@ -149,7 +149,7 @@ public class CardTemplatePreviewer extends AbstractFlashcardViewer {
         }
         try {
             JSONObject template = (JSONObject)model.getJSONArray("tmpls").get(ordinal);
-            PreviewerCard card = (PreviewerCard)getCol().getNewLinkedCard(new PreviewerCard(getCol()), n, template, 1, false);
+            PreviewerCard card = (PreviewerCard)getCol().getNewLinkedCard(new PreviewerCard(getCol()), n, template, 1, 0, false);
             card.setNote(n);
             return card;
         } catch (Exception e) {
